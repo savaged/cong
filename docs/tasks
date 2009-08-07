@@ -1,0 +1,9 @@
+script to initialise/load all the member data,
+so that I don't have to manually add them one at a time.
+
+apply constraint on service report uniqueness.
+
+apply constraint on member uniqueness.
+
+update dates for states.
+

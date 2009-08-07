@@ -1,0 +1,37 @@
+As a congregation secretary,
+I want to find, add or update congregation member details*,
+so that I can produce reports for the circuit overseer and Service Committee & Elder's meetings.
+(* see domain model)
+
+As a congregation secretary,
+I want to manage Group assignments,
+so that I can produce reports for Service Committee & Elder's meetings.
+
+As a congregation secretary,
+I want a report with the fields on jw.org,
+so that I can submit the month's service report there.
+
+As a congregation secretary,
+I want to upload the month's publisher service reports,
+so that I can use that data for reporting.
+
+As a congregation secretary,
+I want to flag all auxiliary pioneers in the service report,
+so that their data aggregates for the reporting.
+
+As a congregation secretary,
+I want to store monthly meeting attendances,
+so that I can produce reports covering many months.
+
+As a congregation secretary,
+I want to remove a congregation member but keep his name for publisher movement records,
+so that they will not be included in the service report but can still be traced.
+
+As a congregation secretary,
+I want to record publisher movements with where publishers come from or go to,
+so that I can trace publishers if enquired of by another congregation.
+
+As a congregation secretary,
+I want those inactive to be set when the become so at report time, 
+so that it manages itself and I can then report on it.
+

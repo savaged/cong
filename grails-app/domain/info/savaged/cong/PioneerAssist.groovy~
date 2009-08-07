@@ -1,0 +1,12 @@
+package info.savaged.cong
+
+class PioneerAssist {
+
+    Date ending
+
+    Member assistant
+    Member assistee
+
+    static constraints = {
+    }
+}
