@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="0" name="ActivePublisherCountTests" package="info.savaged.cong" tests="1" time="1.937" timestamp="2009-07-30T20:54:17">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="0" name="ActivePublisherCountTests" package="info.savaged.cong" tests="1" time="0.952" timestamp="2009-08-08T22:37:30">
       <properties />
 
-      <testcase classname="info.savaged.cong.ActivePublisherCountTests" name="testConstraints" time="1.936" />
+      <testcase classname="info.savaged.cong.ActivePublisherCountTests" name="testConstraints" time="0.951" />
 
       <system-out><![CDATA[--Output from testConstraints--
 ]]></system-out>
@@ -12,10 +12,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="1" name="ExcelUploadControllerTests" package="info.savaged.cong" tests="1" time="1.927" timestamp="2009-07-30T20:54:20">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="1" name="ExcelUploadControllerTests" package="info.savaged.cong" tests="1" time="0.559" timestamp="2009-08-08T22:37:31">
       <properties />
 
-      <testcase classname="info.savaged.cong.ExcelUploadControllerTests" name="testUpload" time="1.926" />
+      <testcase classname="info.savaged.cong.ExcelUploadControllerTests" name="testUpload" time="0.558" />
 
       <system-out><![CDATA[--Output from testUpload--
 ]]></system-out>
@@ -24,10 +24,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="2" name="ExcelUploadServiceTests" package="info.savaged.cong" tests="1" time="1.235" timestamp="2009-07-30T20:54:22">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="2" name="ExcelUploadServiceTests" package="info.savaged.cong" tests="1" time="1.205" timestamp="2009-08-08T22:37:32">
       <properties />
 
-      <testcase classname="info.savaged.cong.ExcelUploadServiceTests" name="testBindData" time="1.235" />
+      <testcase classname="info.savaged.cong.ExcelUploadServiceTests" name="testBindData" time="1.205" />
 
       <system-out><![CDATA[--Output from testBindData--
 DEBUG (cong.ExcelUploadService): opening xl report file at: test_cbs_report_proforma.xls
@@ -57,7 +57,8 @@ DEBUG (cong.ExcelUploadService): Savage, David counted as active publisher
 DEBUG (cong.ExcelUploadService): Savage, Gaile counted as active publisher
 DEBUG (cong.ExcelUploadService): Savage, Jude counted as active publisher
 DEBUG (cong.ExcelUploadService): Savage, Saskia counted as active publisher
-DEBUG (cong.ExcelUploadService): Active publishers count for 5/2009 of 4
+DEBUG (cong.ExcelUploadService): Savage, Kieran counted as active publisher
+DEBUG (cong.ExcelUploadService): Active publishers count for 5/2009 of 5
 DEBUG (cong.ExcelUploadService): Added service report for Savage, Jude as publisher
 DEBUG (cong.ExcelUploadService): Added service report for Savage, Gaile as publisher
 DEBUG (cong.ExcelUploadService): Added service report for  Savage, David as auxiliary pioneer
@@ -72,19 +73,19 @@ DEBUG (cong.ExcelUploadService): Persisting service report totals: PUBLISHERS fo
 DEBUG (cong.ExcelUploadService): Persisting service report totals: AUXILIARY_PIONEERS for 5/2009 with 50 hours
 DEBUG (cong.ExcelUploadService): Persisting service report totals: REGULAR_PIONEERS for 5/2009 with 0 hours
 DEBUG (cong.ExcelUploadService): Persisting active publisher count...
-DEBUG (cong.ExcelUploadService): Persisting active publisher total of 4 for 5/2009
+DEBUG (cong.ExcelUploadService): Persisting active publisher total of 5 for 5/2009
 ]]></system-out>
 
       <system-err><![CDATA[--Output from testBindData--
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="3" name="MeetingAttendanceTests" package="info.savaged.cong" tests="2" time="0.155" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="3" name="MeetingAttendanceTests" package="info.savaged.cong" tests="2" time="0.149" timestamp="2009-08-08T22:37:33">
       <properties />
 
-      <testcase classname="info.savaged.cong.MeetingAttendanceTests" name="testConstraints" time="0.105" />
+      <testcase classname="info.savaged.cong.MeetingAttendanceTests" name="testConstraints" time="0.093" />
 
-      <testcase classname="info.savaged.cong.MeetingAttendanceTests" name="testGetAverage" time="0.05" />
+      <testcase classname="info.savaged.cong.MeetingAttendanceTests" name="testGetAverage" time="0.056" />
 
       <system-out><![CDATA[--Output from testConstraints--
 --Output from testGetAverage--
@@ -95,10 +96,10 @@ DEBUG (cong.ExcelUploadService): Persisting active publisher total of 4 for 5/20
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="4" name="MemberStateTests" package="info.savaged.cong" tests="1" time="0.02" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="4" name="MemberStateTests" package="info.savaged.cong" tests="1" time="0.026" timestamp="2009-08-08T22:37:33">
       <properties />
 
-      <testcase classname="info.savaged.cong.MemberStateTests" name="testConstraints" time="0.02" />
+      <testcase classname="info.savaged.cong.MemberStateTests" name="testConstraints" time="0.026" />
 
       <system-out><![CDATA[--Output from testConstraints--
 ]]></system-out>
@@ -107,12 +108,12 @@ DEBUG (cong.ExcelUploadService): Persisting active publisher total of 4 for 5/20
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="5" name="MemberTests" package="info.savaged.cong" tests="2" time="0.063" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="5" name="MemberTests" package="info.savaged.cong" tests="2" time="0.093" timestamp="2009-08-08T22:37:33">
       <properties />
 
-      <testcase classname="info.savaged.cong.MemberTests" name="testConstraints" time="0.04" />
+      <testcase classname="info.savaged.cong.MemberTests" name="testConstraints" time="0.063" />
 
-      <testcase classname="info.savaged.cong.MemberTests" name="testFullname" time="0.023" />
+      <testcase classname="info.savaged.cong.MemberTests" name="testFullname" time="0.029" />
 
       <system-out><![CDATA[--Output from testConstraints--
 --Output from testFullname--
@@ -123,12 +124,12 @@ DEBUG (cong.ExcelUploadService): Persisting active publisher total of 4 for 5/20
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="6" name="MonthServiceReportTotalsControllerTests" package="info.savaged.cong" tests="2" time="0.098" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="6" name="MonthServiceReportTotalsControllerTests" package="info.savaged.cong" tests="2" time="0.061" timestamp="2009-08-08T22:37:33">
       <properties />
 
-      <testcase classname="info.savaged.cong.MonthServiceReportTotalsControllerTests" name="testIndex" time="0.061" />
+      <testcase classname="info.savaged.cong.MonthServiceReportTotalsControllerTests" name="testIndex" time="0.052" />
 
-      <testcase classname="info.savaged.cong.MonthServiceReportTotalsControllerTests" name="testShow" time="0.037" />
+      <testcase classname="info.savaged.cong.MonthServiceReportTotalsControllerTests" name="testShow" time="0.0090" />
 
       <system-out><![CDATA[--Output from testIndex--
 --Output from testShow--
@@ -139,10 +140,10 @@ DEBUG (cong.ExcelUploadService): Persisting active publisher total of 4 for 5/20
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="7" name="MonthServiceReportTotalsServiceTests" package="info.savaged.cong" tests="1" time="0.146" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="7" name="MonthServiceReportTotalsServiceTests" package="info.savaged.cong" tests="1" time="0.129" timestamp="2009-08-08T22:37:33">
       <properties />
 
-      <testcase classname="info.savaged.cong.MonthServiceReportTotalsServiceTests" name="testBuild" time="0.146" />
+      <testcase classname="info.savaged.cong.MonthServiceReportTotalsServiceTests" name="testBuild" time="0.129" />
 
       <system-out><![CDATA[--Output from testBuild--
 DEBUG (cong.MonthServiceReportTotalsService): Building service report totals and active publisher count for 5/2009...
@@ -153,7 +154,7 @@ DEBUG (cong.MonthServiceReportTotalsService): summing 3 service report totals}
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="8" name="ServiceReportTests" package="info.savaged.cong" tests="1" time="0.05" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="8" name="ServiceReportTests" package="info.savaged.cong" tests="1" time="0.05" timestamp="2009-08-08T22:37:34">
       <properties />
 
       <testcase classname="info.savaged.cong.ServiceReportTests" name="testConstraints" time="0.05" />
@@ -165,10 +166,10 @@ DEBUG (cong.MonthServiceReportTotalsService): summing 3 service report totals}
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="9" name="ServiceReportTotalsTests" package="info.savaged.cong" tests="1" time="0.027" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="9" name="ServiceReportTotalsTests" package="info.savaged.cong" tests="1" time="0.082" timestamp="2009-08-08T22:37:34">
       <properties />
 
-      <testcase classname="info.savaged.cong.ServiceReportTotalsTests" name="testConstraints" time="0.027" />
+      <testcase classname="info.savaged.cong.ServiceReportTotalsTests" name="testConstraints" time="0.082" />
 
       <system-out><![CDATA[--Output from testConstraints--
 ]]></system-out>
@@ -177,12 +178,12 @@ DEBUG (cong.MonthServiceReportTotalsService): summing 3 service report totals}
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="10" name="SplitFullnameTests" package="info.savaged.cong.utils" tests="2" time="0.012" timestamp="2009-07-30T20:54:23">
+  <testsuite errors="0" failures="0" hostname="savaged-mb.local" id="10" name="SplitFullnameTests" package="info.savaged.cong.utils" tests="2" time="0.014" timestamp="2009-08-08T22:37:34">
       <properties />
 
       <testcase classname="info.savaged.cong.utils.SplitFullnameTests" name="testExtractLastname" time="0.0050" />
 
-      <testcase classname="info.savaged.cong.utils.SplitFullnameTests" name="testExtractFirstname" time="0.0060" />
+      <testcase classname="info.savaged.cong.utils.SplitFullnameTests" name="testExtractFirstname" time="0.0080" />
 
       <system-out><![CDATA[--Output from testExtractLastname--
 --Output from testExtractFirstname--

@@ -3,19 +3,19 @@ package info.savaged.cong
 import static info.savaged.cong.utils.SplitFullname.extractLastname
 import static info.savaged.cong.utils.SplitFullname.extractFirstname
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
+import java.text.ParseException
+import java.util.ArrayList
+import java.util.Calendar
+import java.util.Date
+import java.util.Iterator
+import java.util.List
+import org.apache.poi.hssf.usermodel.HSSFRow
+import org.apache.poi.hssf.usermodel.HSSFSheet
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.poifs.filesystem.POIFSFileSystem
 import org.springframework.util.Assert
 
 class ExcelUploadService {
@@ -60,7 +60,7 @@ class ExcelUploadService {
         )
         if (previousReportsForMonthAndYear && previousReportsForMonthAndYear.size() > 0) {
             throw new Exception(
-"""Service report for ${serviceReports[0]?.month}/${serviceReports[0].year} already exists."""
+"Service report for ${serviceReports[0]?.month}/${serviceReports[0].year} already exists."
             )
         }
 
@@ -76,7 +76,7 @@ class ExcelUploadService {
         def countAfter = publishers.size()
         def diff = countBefore - countAfter
         if (diff > 0) {
-            throw new Exception("""There were ${diff} publishers appearing more than once.""")
+            throw new Exception("There were ${diff} publishers appearing more than once.")
         }
     }
 
@@ -92,7 +92,7 @@ class ExcelUploadService {
                     serviceReport?.month + ' and year ' + serviceReport?.year)
             } else {
                 serviceReport.errors.each {
-                    log.debug """failed to save ${serviceReport} due to: ${it}"""
+                    log.debug "failed to save ${serviceReport} due to: ${it}"
                 }
             }
         }
@@ -105,11 +105,11 @@ class ExcelUploadService {
         for (totals in serviceReportTotals) {
             if (totals.save(flush:true)) {
                 log.debug(
-"""Persisting service report totals: ${totals} with ${totals?.hours} hours"""
+"Persisting service report totals: ${totals} with ${totals?.hours} hours"
                 )
             } else {
                 totals.errors.each {
-                    log.debug """failed to save ${totals} due to: ${it}"""
+                    log.debug "failed to save ${totals} due to: ${it}"
                 }
             }
         }
@@ -118,11 +118,11 @@ class ExcelUploadService {
         
         if (activePublisherCount.save(flush:true)) {
             log.debug(
-"""Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.month}/${activePublisherCount.year}"""
+"Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.month}/${activePublisherCount.year}"
             )
         } else {
             activePublisherCount.errors.each {
-                log.debug """failed to save ${activePublisherCount} due to: ${it}"""
+                log.debug "failed to save ${activePublisherCount} due to: ${it}"
             }
         }
     }
@@ -155,11 +155,11 @@ class ExcelUploadService {
             Assert.notNull(fullname, "The publisher's full name should not be null.")
             Assert.hasLength(fullname, "The publisher's full name should always be entered.")
             
-            log.debug """Looking up \'${fullname}\' to add as service report publisher"""
+            log.debug "Looking up \'${fullname}\' to add as service report publisher"
             report.publisher = Member.findByLastnameAndFirstname(
                 extractLastname(fullname), extractFirstname(fullname))
             Assert.notNull(report.publisher, "The publisher should always be in the database.")
-            log.debug """Found ${report.publisher}"""
+            log.debug "Found ${report.publisher}"
 
             if (row.getCell(2) != null) {
                 report.books = (int) row.getCell(2).getNumericCellValue()
@@ -182,23 +182,50 @@ class ExcelUploadService {
             if (row.getCell(8) != null) {
                 report.comments = row.getCell(8).getRichStringCellValue().getString()
             }
-            def isAuxPioneer = { comments ->
-                Boolean match = false
-                if (comments) {
-                    Boolean match1 = comments =~ ~"(A|a)ux"
-                    Boolean match2 = comments =~ ~"(P|p)io"
-                    match = match1 & match2
-                }
-                if (match && comments.startsWith('Not ')) {
-                    match = false
-                }
-                return match
-            }
             report.isAuxPioneer = isAuxPioneer(report?.comments)
+
+	    setInactiveState(report, reportMonth, reportYear)
 
             serviceReports.add(report)
             log.debug("processed row: " + rowCount)
         }
+    }
+
+    private Boolean isAuxPioneer(String comments) {
+        Boolean match = false
+        if (comments) {
+            Boolean match1 = comments =~ ~"(A|a)ux"
+            Boolean match2 = comments =~ ~"(P|p)io"
+            match = match1 & match2
+        }
+        if (match && comments.startsWith('Not ')) {
+            match = false
+        }
+        return match
+    }
+
+    private Boolean setInactiveState(report, reportMonth, reportYear) {
+	    isInactive(report, reportMonth, reportYear)
+	    // TODO set INACTIVE open or closed if reported in past six months
+    }
+
+    private Boolean isInactive(report, reportMonth, reportYear) {
+	    // get the date six months before the report
+	    def monthSixMonthsPrior
+	    def yearSixMonthsPrior
+	    def cal = Calendar.instance
+	    cal.with {
+	    	set reportYear, reportMonth-5, 1
+	    	monthSixMonthsPrior = get(Calendar.MONTH)
+		yearSixMonthsPrior = get(Calendar.YEAR)
+	    }
+	    // sum reports for publisher in the six month range
+	    //def reports// = ServiceReport.findAll('from info.savaged.cong.ServiceReport as r where r.publisher = ? and month between ? and ? and year between ? and ?', [report?.publisher.id, monthSixMonthsPrior, reportMonth, yearSixMonthsPrior, reportYear])
+	    def reports = ServiceReport.findAllByPublisher(report?.publisher.id)
+	    def hours = 0
+	    reports.each { hours += it.hours }
+	    hours < 1
+	    false
     }
 
     private void calcTotals() {
@@ -214,7 +241,7 @@ class ExcelUploadService {
             if (inactive) {
                 if (!inactive.ending) {
                     log.debug(
-"""${publisher} not counted as active publisher due to being in an inactive state"""
+			"${publisher} not counted as active publisher due to being in an inactive state"
                     )
                     continue
                 }
@@ -223,7 +250,7 @@ class ExcelUploadService {
             if (disfellowshipped) {
                 if (!disfellowshipped.ending) {
                     log.debug(
-"""${publisher} not counted as active publisher due to being in a disfellowshipped state"""
+			"${publisher} not counted as active publisher due to being in a disfellowshipped state"
                     )
                     continue
                 }
@@ -236,10 +263,10 @@ class ExcelUploadService {
                 continue
             }
             activePublishers.put(publisher.fullname, publisher)
-            log.debug """${publisher} counted as active publisher"""
+            log.debug "${publisher} counted as active publisher"
         }
         activePublisherCount = new ActivePublisherCount(month:reportMonth, year:reportYear, publishers:activePublishers.size())
-        log.debug """${activePublisherCount} of ${activePublisherCount.publishers}"""
+        log.debug "${activePublisherCount} of ${activePublisherCount.publishers}"
 
         serviceReportTotals = [
             new ServiceReportTotals(category:Categories.PUBLISHERS, month:reportMonth, year:reportYear),
@@ -256,19 +283,19 @@ class ExcelUploadService {
                     if (!regPioneer.ending) {
                         updateRow(serviceReportTotals[2], serviceReport)
                         log.debug(
-    """Added service report for ${serviceReport?.publisher} as regular pioneer"""
+				"Added service report for ${serviceReport?.publisher} as regular pioneer"
                         )
                     }
                 } else {
                     if (serviceReport.isAuxPioneer) {
                         updateRow(serviceReportTotals[1], serviceReport)
                         log.debug(
-    """Added service report for  ${serviceReport?.publisher} as auxiliary pioneer"""
+				"Added service report for  ${serviceReport?.publisher} as auxiliary pioneer"
                         )
                     } else {
                         updateRow(serviceReportTotals[0], serviceReport)
                         log.debug(
-    """Added service report for ${serviceReport?.publisher} as publisher"""
+    				"Added service report for ${serviceReport?.publisher} as publisher"
                         )
                     }
                 }

@@ -11,6 +11,6 @@ class ActivePublisherCount {
     }
 
     String toString() {
-        return """Active publishers count for ${month}/${year}"""
+        return "Active publishers count for ${month}/${year}"
     }
 }

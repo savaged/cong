@@ -24,6 +24,6 @@ class MemberState {
     }
 
     String toString() {
-        return """${member} is ${name.toString()} from ${starting} to ${ending} """
+        return "${member} is ${name.toString()} from ${starting} to ${ending}"
     }
 }
