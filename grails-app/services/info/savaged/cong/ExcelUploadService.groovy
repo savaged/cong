@@ -205,12 +205,11 @@ class ExcelUploadService {
     }
 
     private Boolean setInactiveState(report, reportMonth, reportYear) {
-	    isInactive(report, reportMonth, reportYear)
+	    isPreviouslyInactive(report, reportMonth, reportYear)
 	    // TODO set INACTIVE open or closed if reported in past six months
     }
 
-    private Boolean isInactive(report, reportMonth, reportYear) {
-	    // get the date six months before the report
+    private Boolean isPreviouslyInactive(report, reportMonth, reportYear) {
 	    def monthSixMonthsPrior
 	    def yearSixMonthsPrior
 	    def cal = Calendar.instance
