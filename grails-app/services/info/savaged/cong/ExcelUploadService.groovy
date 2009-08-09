@@ -219,13 +219,20 @@ class ExcelUploadService {
 	    	monthSixMonthsPrior = get(Calendar.MONTH)
 		yearSixMonthsPrior = get(Calendar.YEAR)
 	    }
-	    // sum reports for publisher in the six month range
-	    //def reports// = ServiceReport.findAll('from info.savaged.cong.ServiceReport as r where r.publisher = ? and month between ? and ? and year between ? and ?', [report?.publisher.id, monthSixMonthsPrior, reportMonth, yearSixMonthsPrior, reportYear])
-	    def reports = ServiceReport.findAllByPublisher(report?.publisher.id)
+	    def yearAndMonthSixMonthsPrior = yearSixMonthsPrior * 100  
+	    yearAndMonthSixMonthsPrior += monthSixMonthsPrior
+	    def reportYearAndMonth = reportYear * 100
+	    reportYearAndMonth += reportMonth
+	    def range = [yearAndMonthSixMonthsPrior..reportYearAndMonth]
 	    def hours = 0
-	    reports.each { hours += it.hours }
+	    report?.publisher?.serviceReports.each {
+		    def currentReportYearAndMonth = it.year * 100 
+		    currentReportYearAndMonth += it.month
+		    if (range.contains(currentReportYearAndMonth)) {
+			    hours += it.hours 
+		    }
+	    }
 	    hours < 1
-	    false
     }
 
     private void calcTotals() {
