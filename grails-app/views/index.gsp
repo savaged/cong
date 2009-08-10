@@ -15,6 +15,7 @@ click on each to execute its default action:</p>
   <li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
 </g:each>
 <li class="controller"><g:link controller="member" action="search">info.savaged.cong.MemberController.search</g:link></br></li>
+<li class="controller"><g:link controller="member" action="inactive">info.savaged.cong.MemberController.inactive</g:link></br></li>
 </ul>
 </div>
 </body>

@@ -184,8 +184,6 @@ class ExcelUploadService {
             }
             report.isAuxPioneer = isAuxPioneer(report?.comments)
 
-	    setInactiveState(report, reportMonth, reportYear)
-
             serviceReports.add(report)
             log.debug("processed row: " + rowCount)
         }
@@ -203,37 +201,7 @@ class ExcelUploadService {
         }
         return match
     }
-
-    private Boolean setInactiveState(report, reportMonth, reportYear) {
-	    isPreviouslyInactive(report, reportMonth, reportYear)
-	    // TODO set INACTIVE open or closed if reported in past six months
-    }
-
-    private Boolean isPreviouslyInactive(report, reportMonth, reportYear) {
-	    def monthSixMonthsPrior
-	    def yearSixMonthsPrior
-	    def cal = Calendar.instance
-	    cal.with {
-	    	set reportYear, reportMonth-5, 1
-	    	monthSixMonthsPrior = get(Calendar.MONTH)
-		yearSixMonthsPrior = get(Calendar.YEAR)
-	    }
-	    def yearAndMonthSixMonthsPrior = yearSixMonthsPrior * 100  
-	    yearAndMonthSixMonthsPrior += monthSixMonthsPrior
-	    def reportYearAndMonth = reportYear * 100
-	    reportYearAndMonth += reportMonth
-	    def range = [yearAndMonthSixMonthsPrior..reportYearAndMonth]
-	    def hours = 0
-	    report?.publisher?.serviceReports.each {
-		    def currentReportYearAndMonth = it.year * 100 
-		    currentReportYearAndMonth += it.month
-		    if (range.contains(currentReportYearAndMonth)) {
-			    hours += it.hours 
-		    }
-	    }
-	    hours < 1
-    }
-
+    
     private void calcTotals() {
 
         log.debug 'Calculating totals...'
