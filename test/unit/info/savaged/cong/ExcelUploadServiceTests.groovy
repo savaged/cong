@@ -35,6 +35,7 @@ class ExcelUploadServiceTests extends GrailsUnitTestCase {
         mockDomain(ServiceReportTotals)
         mockDomain(ActivePublisherCount)
 
+        // TODO sort out where this test resource should live, maybe with the grails maven plugin support
         file = new File('/Users/davidsavage/savaged.info/cong/reports/cong/docs/test_cbs_report_proforma.xls')
         excelUploadService = new ExcelUploadService()
     }
