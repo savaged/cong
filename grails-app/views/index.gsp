@@ -5,9 +5,10 @@
 </head>
 <body>
 <h1 style="margin-left:20px;">Welcome to Groovy-Cong</h1>
-<p style="margin-left:20px;width:80%">
+<h2 style="margin-left:20px;width:80%">
 Cong is lean tooling for a JW congregation secretary.
-<br/>
+</h2>
+<p style="margin-left:20px;width:80%">
 Copyright (C) 2009 David Savage.
 <br/>
 This program is free software: you can redistribute it and/or modify
@@ -21,7 +22,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 <br/>
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <a href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.
+</p>
+<p>&nbsp;
 </p>
 <p style="margin-left:20px;width:80%">
   Below is a list of controllers that are currently deployed in this application,
