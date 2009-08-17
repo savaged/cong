@@ -1,5 +1,3 @@
-
-
 package info.savaged.cong
 
 class MemberController {
@@ -8,6 +6,7 @@ class MemberController {
 
     def search = {
         if (request.method == 'POST') {
+            log.debug "Searching using lastname:${params?.lastname} & firstname:${params?.firstname}"
             def member = Member.findByLastnameLikeAndFirstnameLike(params?.lastname, params?.firstname)
             redirect(uri:"/member/show/${member?.id}")
         }
@@ -15,39 +14,38 @@ class MemberController {
 
     def inactive = {
         if (request.method == 'POST') {
-	    def reportYear = Integer.parseInt(params.starting_year)
-            def reportMonth = Integer.parseInt(params.starting_month)
-    
-            def monthSixMonthsPrior
-	    def yearSixMonthsPrior
-	    def cal = Calendar.instance
-	    cal.with {
-	    	set reportYear, reportMonth-5, 1
-	    	monthSixMonthsPrior = get(Calendar.MONTH)
-		yearSixMonthsPrior = get(Calendar.YEAR)
-	    }
-	    def yearAndMonthSixMonthsPrior = yearSixMonthsPrior * 100  
-	    yearAndMonthSixMonthsPrior += monthSixMonthsPrior
-	    def reportYearAndMonth = reportYear * 100
-	    reportYearAndMonth += reportMonth
-	    def range = [yearAndMonthSixMonthsPrior..reportYearAndMonth]
+            def cal = Calendar.instance
+            cal.set(
+                Integer.parseInt(params.starting_year),
+                Integer.parseInt(params.starting_month), 1)
 
-	    def publishers = Member.findAllByIsPublisher(true)
+            def range = []
+            (0..5).each {
+                def c = { offset ->
+                    def yyyymm
+                    cal.with {
+                        add Calendar.MONTH, - offset
+                        yyyymm = (get(Calendar.YEAR) * 100) + get(Calendar.MONTH)
+                        add Calendar.MONTH, offset
+                    }
+                    yyyymm
+                }
+                range << c(it)
+            }
+            def publishers = Member.findAllByIsPublisher(true)
 	    def inactiveMembers = []
 	    publishers.each {
 	        def hours = 0
 	        it?.serviceReports.each {
-		    def currentReportYearAndMonth = it.year * 100 
-		    currentReportYearAndMonth += it.month
-		    if (range.contains(currentReportYearAndMonth)) {
-			    hours += it.hours 
+                    def reportDate = (it.year * 100) + it.month
+		    if (range.contains(reportDate)) {
+                        hours += it.hours
 		    }
 		}
 		if (hours < 1) {
-		    inactiveMembers.add it
+		    inactiveMembers << it
 		}
-	    }
-	    
+	    }	    
 	    render view:'list', model:[memberInstanceList:inactiveMembers, memberInstanceTotal:inactiveMembers.size()]
 	}
     }
