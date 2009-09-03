@@ -41,6 +41,22 @@ class MemberState {
         ending(nullable:true)
     }
 
+    static transients = ['ended']
+ 
+    // Hack to get around gui not allowing empty date
+    Boolean getEnded() {
+        Boolean ended = false
+        if (ending) {
+            Calendar cal = Calendar.instance
+            cal.clear()
+            if (ending > cal.time) {
+                ended = true
+            }
+        }
+        ended
+    }
+    
+
     String toString() {
         return "${member} is ${name.toString()} from ${starting} to ${ending}"
     }

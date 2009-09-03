@@ -20,6 +20,11 @@ package info.savaged.cong
 
 enum Meeting {CBS, SM, PT, WT}
 
+/**
+ * Simulation of the paper "Congregation Meeting Attendance Record (S-88)"
+ *
+ * @author savaged
+ */
 class MeetingAttendance {
 
     Integer month

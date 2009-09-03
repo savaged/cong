@@ -18,6 +18,11 @@ along with cong.  If not, see <http://www.gnu.org/licenses/>.
 */
 package info.savaged.cong
 
+/**
+ * Simulation of the paper "Congregation Publisher Record Card (S-21)"
+ *
+ * @author savaged
+ */
 class ServiceReport {
 
     Integer month

@@ -18,6 +18,8 @@ along with cong.  If not, see <http://www.gnu.org/licenses/>.
 */
 package info.savaged.cong
 
+import info.savaged.cong.utils.DateUtils
+
 class MemberController {
     
     def scaffold = true
@@ -32,31 +34,19 @@ class MemberController {
 
     def inactive = {
         if (request.method == 'POST') {
-            def cal = Calendar.instance
-            cal.set(
+            def from = Calendar.instance
+            from.set(
                 Integer.parseInt(params.starting_year),
                 Integer.parseInt(params.starting_month), 1)
-
-            def range = []
-            (0..5).each {
-                def c = { offset ->
-                    def yyyymm
-                    cal.with {
-                        add Calendar.MONTH, - offset
-                        yyyymm = (get(Calendar.YEAR) * 100) + get(Calendar.MONTH)
-                        add Calendar.MONTH, offset
-                    }
-                    yyyymm
-                }
-                range << c(it)
-            }
-            def publishers = Member.findAllByIsPublisher(true)
+            
+	    def publishers = Member.findAllByIsPublisher(true)
 	    def inactiveMembers = []
 	    publishers.each {
 	        def hours = 0
 	        it?.serviceReports.each {
-                    def reportDate = (it.year * 100) + it.month
-		    if (range.contains(reportDate)) {
+                    def reportDate = Calendar.instance
+		    reportDate.set(it.year, it.month, 1)
+		    if (DateUtils.inPreviousMonthsRange(reportDate, 6, from)) {
                         hours += it.hours
 		    }
 		}

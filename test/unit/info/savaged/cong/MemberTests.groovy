@@ -55,4 +55,19 @@ class MemberTests extends GrailsUnitTestCase {
         member.firstname = 'David'
         assertEquals 'Savage, David', member.fullname
     }
+
+    void testGetEnded() {
+        def memberState = new MemberState()
+        assertFalse memberState.ended
+ 
+        def cal = Calendar.instance
+        cal.clear()
+        memberState.ending = cal.time
+        assertFalse memberState.ended
+ 
+        cal.set 2009,8,1
+        memberState.ending = cal.time
+        assertTrue memberState.ended
+    }
+    
 }
