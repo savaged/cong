@@ -33,14 +33,23 @@ class MeetingAttendance {
     Integer total
     Meeting meeting
     
-    static constraints = {}
+    static constraints = {
+        year(min:1901)
+        month(min:1)
+        meetings(min:1)
+        total(min:1)
+    }
 
-    static transients = ['average']
+    static transients = ['average', 'yyyymm']
 
     Integer getAverage() {
         if (total != null && total > 0 && meetings != null && meetings > 0) {
             Math.round(total / meetings)
         }
+    }
+
+    Integer getYyyymm() {
+	info.savaged.cong.utils.DateUtils.convert(year, month)
     }
 
     String toString() {

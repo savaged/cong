@@ -33,12 +33,22 @@ class ServiceReportTotals {
     Integer returnVisits = 0
     Integer studies = 0
 
+    static transients = ['yyyymm']
+
     static constraints = {
+	year(min:1901)
+	month(min:1)
+	hours(min:1)
+	publishers(min:1)
         books(nullable:true)
         brochures(nullable:true)
         magazines(nullable:true)
         returnVisits(nullable:true)
         studies(nullable:true)
+    }
+
+    Integer getYyyymm() {
+	info.savaged.cong.utils.DateUtils.convert(year, month)
     }
 
     String toString() {

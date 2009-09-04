@@ -34,19 +34,17 @@ class MemberController {
 
     def inactive = {
         if (request.method == 'POST') {
-            def from = Calendar.instance
-            from.set(
+            def from = DateUtils.convert(
                 Integer.parseInt(params.starting_year),
-                Integer.parseInt(params.starting_month), 1)
+                Integer.parseInt(params.starting_month))
+	    def previousMonthsRange = DateUtils.previousMonthsRange(6, from)
             
 	    def publishers = Member.findAllByIsPublisher(true)
 	    def inactiveMembers = []
 	    publishers.each {
 	        def hours = 0
 	        it?.serviceReports.each {
-                    def reportDate = Calendar.instance
-		    reportDate.set(it.year, it.month, 1)
-		    if (DateUtils.inPreviousMonthsRange(reportDate, 6, from)) {
+		    if (previousMonthsRange.contains(it.yyyymm)) {
                         hours += it.hours
 		    }
 		}

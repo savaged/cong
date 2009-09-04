@@ -24,8 +24,16 @@ class ActivePublisherCount {
     Integer year
     Integer publishers
 
+    static transients = ['yyyymm']
+
     static constraints = {
+        year(min:1901)
+        month(min:1)
         publishers(min:1)
+    }
+
+    Integer getYyyymm() {
+	info.savaged.cong.utils.DateUtils.convert(year, month)
     }
 
     String toString() {

@@ -1,4 +1,5 @@
 import info.savaged.cong.*
+
 import java.text.SimpleDateFormat
 import grails.util.*
 
@@ -65,9 +66,61 @@ class BootStrap {
             serviceReports.each {
                 it.save()
             }
+
+	    def activePublisherCounts = [
+	        new ActivePublisherCount(month:2, year:2009, publishers:5),
+	        new ActivePublisherCount(month:3, year:2009, publishers:4),
+	        new ActivePublisherCount(month:4, year:2009, publishers:4),
+	        new ActivePublisherCount(month:5, year:2009, publishers:4),
+	        new ActivePublisherCount(month:6, year:2009, publishers:4),
+	        new ActivePublisherCount(month:7, year:2009, publishers:4),
+	        new ActivePublisherCount(month:8, year:2009, publishers:4)
+	    ]
+	    activePublisherCounts.each {
+                it.save()
+            }
+
+	    def serviceReportTotals = [
+	        new ServiceReportTotals(month:2, year:2009, publishers:4, hours:61, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:2, year:2009, publishers:1, hours:15, category:Categories.REGULAR_PIONEERS),
+		
+		new ServiceReportTotals(month:3, year:2009, publishers:3, hours:48, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:3, year:2009, publishers:1, hours:16, category:Categories.REGULAR_PIONEERS),
+		
+                new ServiceReportTotals(month:4, year:2009, publishers:3, hours:45, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:4, year:2009, publishers:1, hours:15, category:Categories.REGULAR_PIONEERS),
+		
+                new ServiceReportTotals(month:5, year:2009, publishers:3, hours:42, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:5, year:2009, publishers:1, hours:14, category:Categories.REGULAR_PIONEERS),
+
+                new ServiceReportTotals(month:6, year:2009, publishers:3, hours:39, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:6, year:2009, publishers:1, hours:13, category:Categories.REGULAR_PIONEERS),
+
+                new ServiceReportTotals(month:7, year:2009, publishers:3, hours:36, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:7, year:2009, publishers:1, hours:12, category:Categories.REGULAR_PIONEERS),
+	
+                new ServiceReportTotals(month:8, year:2009, publishers:3, hours:33, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:8, year:2009, publishers:1, hours:11, category:Categories.REGULAR_PIONEERS)
+	    ]
+	    serviceReportTotals.each {
+		it.save()
+	    }
+
+	    def meetingAttendances = [
+	        new MeetingAttendance(month:2, year:2009, meetings:3, total:280),
+	        new MeetingAttendance(month:3, year:2009, publishers:4, total:360),
+	        new MeetingAttendance(month:4, year:2009, publishers:4, total:360),
+	        new MeetingAttendance(month:5, year:2009, publishers:5, total:420),
+	        new MeetingAttendance(month:6, year:2009, publishers:4, total:360),
+	        new MeetingAttendance(month:7, year:2009, publishers:4, total:360),
+	        new MeetingAttendance(month:8, year:2009, publishers:4, total:360)
+	    ]
+	    meetingAttendances.each {
+                it.save(flush:true)
+            } // TODO the meeting attendance isnt sticking
         }
     }
     
     def destroy = {
     }
-} 
+}

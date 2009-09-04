@@ -29,18 +29,22 @@ class DateUtilsTests extends GrailsUnitTestCase {
    protected void tearDown() {
        super.tearDown()
    }
+
+   void testConvert() {
+       def y = 2009
+       def m = 12
+       def yyyymm = 200912
+
+       assertEquals yyyymm, DateUtils.convert(y, m)
+       assertEquals y, DateUtils.convert(yyyymm)['year']
+       assertEquals m, DateUtils.convert(yyyymm)['month']
+   }
    
    void testPreviousMonthsRange() {
-       def cal = Calendar.instance
-       cal.set(2009, 02, 01)
-       def range = DateUtils.previousMonthsRange(6, cal)
+       def from = 200902
+       def range = DateUtils.previousMonthsRange(6, from)
        assertEquals 6, range.size()
        assertEquals 200809, range[5]
    }
 
-   void testInPreviousMonthsRange() {
-       def cal = Calendar.instance
-       cal.set(2009, 02, 01)
-       assertTrue DateUtils.inPreviousMonthsRange(cal, 6, cal)
-   }
 }

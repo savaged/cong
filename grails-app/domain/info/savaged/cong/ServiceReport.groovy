@@ -37,6 +37,8 @@ class ServiceReport {
     String comments
     Member publisher
 
+    static transients = ['yyyymm']
+
     static belongsTo = Member
 
     ServiceReport() {
@@ -44,6 +46,8 @@ class ServiceReport {
     }
 
     static constraints = {
+        year(min:1901)
+        month(min:1)
         hours(min:1)
         books(nullable:true)
         brochures(nullable:true)
@@ -51,6 +55,10 @@ class ServiceReport {
         returnVisits(nullable:true)
         studies(nullable:true)
         comments(nullable:true)
+    }
+
+    Integer getYyyymm() {
+	info.savaged.cong.utils.DateUtils.convert(year, month)
     }
 
     String toString() {

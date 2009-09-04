@@ -20,35 +20,47 @@ package info.savaged.cong.utils
 
 class DateUtils {
 
-   static Calendar convert(Integer year, Integer month) {
+   static Map convert(Integer yyyymm) {
+       Integer y = 1901
+       Integer m = 1
+       if (yyyymm != null) {
+	   y = Math.round(yyyymm / 100)
+	   m = yyyymm - (y * 100)
+       }
+       ['year':y, 'month':m]
+   }
+
+   static Integer convert(Integer year, Integer month) {
+       Integer yyyymm = 190101
+       if (year != null && month != null) {
+	   if (month < 1) {
+	       month = 12
+	       year = year - 1
+	   }
+	   yyyymm = (year * 100) + month
+       }
+       yyyymm
+   }
+
+   private static Calendar convertToCalendar(Integer yyyymm) {
+       def map = convert(yyyymm)
        def cal = Calendar.instance
-       cal.set year, month, 1
+       cal.set map['year'], map['month'] - 1, 1
        cal
    }
-   
-   static Integer convert(Integer year, Integer month) {
-       assert year > 0
-       if (month < 1) {
-	   month = 12
-	   year = year - 1
-       }
-       (year * 100) + month
+
+   private static Integer convertToYyyymm(Calendar cal) {
+       convert cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1
    }
 
-   static Integer convert(Calendar cal) {
-       def year = cal.get(Calendar.YEAR)
-       def month = cal.get(Calendar.MONTH)
-       convert year, month
-   }
-
-   static List previousMonthsRange(Integer size, Calendar from) {
+   static List previousMonthsRange(Integer size, Integer yyyymm) {
        def range = []
+       def cal = convertToCalendar(yyyymm)
        (0..size-1).each {
 	   def c = { offset ->
-	       def yyyymm
-	       from.add Calendar.MONTH, - offset
-	       yyyymm = convert(from)
-	       from.add Calendar.MONTH, offset
+	       cal.add Calendar.MONTH, - offset
+	       yyyymm = convertToYyyymm(cal)
+	       cal.add Calendar.MONTH, offset
 	       yyyymm
 	   }
 	   range << c(it)
@@ -57,8 +69,4 @@ class DateUtils {
        range
    }
 
-   static Boolean inPreviousMonthsRange(Calendar cal, Integer size, Calendar from) {
-       def range = previousMonthsRange(size, from)
-       range.contains(convert(cal))
-   }
 }
