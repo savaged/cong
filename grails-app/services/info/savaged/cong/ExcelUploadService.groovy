@@ -305,5 +305,36 @@ class ExcelUploadService {
         row.studies += (serviceReport.studies ? serviceReport.studies : 0)
     }
 
+
+    private void buildYearAnalysis() {
+        if (reportMonth != 8) return
+
+        // service year start
+        def serviceYearStart = reportYear-1
+
+        // meeting averages
+	def meetingAttendances = MeetingAttendance.findAllByYyyymmBetween(
+	    DateUtils.convert(serviceYearStart, 9), DateUtils.convert(reportYear, 8))
+
+        // active publishers
+
+        // active baptised publishers
+
+        // regular publishers
+
+        // auxiliary pioneer individuals from service year
+
+        // new publishers this year
+
+        // inactive this year
+
+        // reactivated this year
+
+        // elders
+
+        // servants
+
+    }
+
 }
 
