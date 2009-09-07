@@ -19,17 +19,48 @@ along with cong.  If not, see <http://www.gnu.org/licenses/>.
 package info.savaged.cong
 
 import grails.test.*
+import info.savaged.cong.utils.DateUtils
 
 class YearAnalysisTests extends GrailsUnitTestCase {
+
+    def excelUploadService
+
     protected void setUp() {
         super.setUp()
+	mockDomain YearAnalysis
     }
 
     protected void tearDown() {
         super.tearDown()
     }
 
-    void testSomething() {
-	// TODO TDD for August upload save
+    void testYearAnalysis() {
+	def file = new File('/Users/davidsavage/savaged.info/cong/reports/cong/docs/test_cbs_report_proforma.xls')
+        excelUploadService.bindData file, 8, 2009 
+
+	//def yearAnalysis = YearAnalysis.findByServiceYearStart(2009)
+	//assertNotNull yearAnalysis
+
+        // meeting averages
+
+        // active publishers
+
+        // active baptised publishers
+
+        // regular publishers
+
+        // auxiliary pioneer individuals from service year
+
+        // new publishers this year
+
+        // inactive this year
+
+        // reactivated this year
+
+        // elders
+
+        // servants
+
+
     }
 }

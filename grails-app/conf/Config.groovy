@@ -39,30 +39,16 @@ environments {
     }
 }
 
-// log4j configuration
-log4j = { root ->
-    root.level = org.apache.log4j.Level.ERROR
-
+// custom log4j configuration
+log4j = { 
+    
     appenders {
-        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        file name:'cong', 
+	    file:'cong.log', 
+	    layout:pattern(conversionPattern:'%d [%t] %-5p %c{2} - %m%n')
     }
 
-    info   'grails.app'
-
-    debug  'grails.app', 'info.savaged.cong'
-
-    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
-	       'org.codehaus.groovy.grails.web.pages', //  GSP
-	       'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-	       'org.codehaus.groovy.grails."web.mapping.filter', // URL mapping
-	       'org.codehaus.groovy.grails."web.mapping', // URL mapping
-	       'org.codehaus.groovy.grails.commons', // core / classloading
-	       'org.codehaus.groovy.grails.plugins', // plugins
-	       'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-	       'org.springframework',
-	       'org.hibernate'
-
-    warn   'org.mortbay.log'
+    debug cong:'grails.app'
 }
 
 

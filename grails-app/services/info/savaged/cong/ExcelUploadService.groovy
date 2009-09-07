@@ -20,6 +20,7 @@ package info.savaged.cong
 
 import static info.savaged.cong.utils.SplitFullname.extractLastname
 import static info.savaged.cong.utils.SplitFullname.extractFirstname
+import info.savaged.cong.utils.DateUtils
 
 import java.io.FileInputStream
 import java.io.IOException
@@ -63,9 +64,10 @@ class ExcelUploadService {
         retrieveReports(hssfSheet)
 
         validateReports()
-        calcTotals()
+        buildMonthTotals()
         persistReports()
-        persistTotals()
+
+	buildYearAnalysis()
     }
 
     private void validateReports() {
@@ -116,7 +118,7 @@ class ExcelUploadService {
         }
     }
 
-    private void persistTotals() {
+    private void persistMonthTotals() {
 
         log.debug 'Persisting ' + serviceReportTotals.size() + ' service report totals...'
 
@@ -219,14 +221,12 @@ class ExcelUploadService {
         }
         return match
     }
-    
-    private void calcTotals() {
 
-        log.debug 'Calculating totals...'
+    private Map retrieveActivePublishers() {
+	
+	def activePublishers = [:]
 
         def publishers = Member.findAllByIsPublisher(true)
-
-        def activePublishers = [:]
 
         for (publisher in publishers) {
             def inactive = MemberState.findByNameAndMember(States.INACTIVE.toString(), publisher)
@@ -249,8 +249,8 @@ class ExcelUploadService {
             }
             if (publisher?.historisation?.length() > 1) {
                 log.debug(
-"""${publisher} not counted as active publisher due to being historised with the following note
-\'$publisher.historisation}\'"""
+		    """${publisher} not counted as active publisher due to being historised with the following note
+			\'$publisher.historisation}\'"""
                 )
                 continue
             }
@@ -259,6 +259,15 @@ class ExcelUploadService {
         }
         activePublisherCount = new ActivePublisherCount(month:reportMonth, year:reportYear, publishers:activePublishers.size())
         log.debug "${activePublisherCount} of ${activePublisherCount.publishers}"
+
+        activePublishers
+    }
+    
+    private void buildMonthTotals() {
+
+        log.debug 'Calculating month totals...'
+        
+	def activePublishers = retrieveActivePublishers()
 
         serviceReportTotals = [
             new ServiceReportTotals(category:Categories.PUBLISHERS, month:reportMonth, year:reportYear),
@@ -293,6 +302,8 @@ class ExcelUploadService {
                 }
             }
         }
+
+        persistMonthTotals()
     }
 
     private void updateRow(row, serviceReport) {
@@ -313,10 +324,12 @@ class ExcelUploadService {
         def serviceYearStart = reportYear-1
 
         // meeting averages
-	def meetingAttendances = MeetingAttendance.findAllByYyyymmBetween(
-	    DateUtils.convert(serviceYearStart, 9), DateUtils.convert(reportYear, 8))
+//	def meetingAttendances = MeetingAttendance.findAllByYyyymmBetween(
+//	    DateUtils.convert(serviceYearStart, 9), DateUtils.convert(reportYear, 8))
 
         // active publishers
+//	def activePublisherCounts = ActivePublisherCount.findAllByYyyymmBetween(
+//	    DateUtils.convert(serviceYearStart, 9), DateUtils.convert(reportYear, 8))
 
         // active baptised publishers
 
