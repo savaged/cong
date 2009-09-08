@@ -37,11 +37,35 @@ class MemberController {
             def from = DateUtils.convert(
                 Integer.parseInt(params.starting_year),
                 Integer.parseInt(params.starting_month))
-	    def previousMonthsRange = DateUtils.previousMonthsRange(6, from)
             
 	    def publishers = Member.findAllByIsPublisher(true)
+
+	    def publishersNotIncludingLongTermInactive = []
+	    def fromLessOneYear = from - 1000
+	    
+	    publishers.each { publisher ->
+		publisher?.states.each {
+		    def isLongTermInactive = false
+		    if (it.name == States.INACTIVE) {
+			if (!it.ended) {
+			    def cal = Calendar.instance
+			    cal.setTime it.starting
+			    def starting = DateUtils.convert(
+				cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
+			    if (starting < fromLessOneYear) {
+				isLongTermInactive = true
+			    }
+			}
+		    }
+		    if (!isLongTermInactive) {
+			publishersNotIncludingLongTermInactive << publisher
+		    }
+		}
+	    }
+
 	    def inactiveMembers = []
-	    publishers.each {
+	    def previousMonthsRange = DateUtils.previousMonthsRange(6, from)
+	    publishersNotIncludingLongTermInactive.each {
 	        def hours = 0
 	        it?.serviceReports.each {
 		    if (previousMonthsRange.contains(it.yyyymm)) {
@@ -52,7 +76,9 @@ class MemberController {
 		    inactiveMembers << it
 		}
 	    }	    
-	    render view:'list', model:[memberInstanceList:inactiveMembers, memberInstanceTotal:inactiveMembers.size()]
+	    render view:'list', model:[
+	        memberInstanceList:inactiveMembers, 
+		memberInstanceTotal:inactiveMembers.size()]
 	}
     }
 

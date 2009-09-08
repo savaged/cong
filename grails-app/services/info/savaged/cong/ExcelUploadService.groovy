@@ -67,22 +67,11 @@ class ExcelUploadService {
         buildMonthTotals()
         persistReports()
 
-	buildYearAnalysis()
     }
 
     private void validateReports() {
 
         log.debug 'Validating reports...'
-
-        // check that this month hasn't been submitted previously
-        def previousReportsForMonthAndYear = ServiceReport.findAllByMonthAndYear(
-            serviceReports[0].month, serviceReports[0].year
-        )
-        if (previousReportsForMonthAndYear && previousReportsForMonthAndYear.size() > 0) {
-            throw new Exception(
-"Service report for ${serviceReports[0]?.month}/${serviceReports[0].year} already exists."
-            )
-        }
 
         // check that no publisher appears twice
         def publishers = []
@@ -247,13 +236,6 @@ class ExcelUploadService {
                     continue
                 }
             }
-            if (publisher?.historisation?.length() > 1) {
-                log.debug(
-		    """${publisher} not counted as active publisher due to being historised with the following note
-			\'$publisher.historisation}\'"""
-                )
-                continue
-            }
             activePublishers.put(publisher.fullname, publisher)
             log.debug "${publisher} counted as active publisher"
         }
@@ -314,39 +296,6 @@ class ExcelUploadService {
         row.magazines += (serviceReport.magazines ? serviceReport.magazines : 0)
         row.returnVisits += (serviceReport.returnVisits ? serviceReport.returnVisits : 0)
         row.studies += (serviceReport.studies ? serviceReport.studies : 0)
-    }
-
-
-    private void buildYearAnalysis() {
-        if (reportMonth != 8) return
-
-        // service year start
-        def serviceYearStart = reportYear-1
-
-        // meeting averages
-//	def meetingAttendances = MeetingAttendance.findAllByYyyymmBetween(
-//	    DateUtils.convert(serviceYearStart, 9), DateUtils.convert(reportYear, 8))
-
-        // active publishers
-//	def activePublisherCounts = ActivePublisherCount.findAllByYyyymmBetween(
-//	    DateUtils.convert(serviceYearStart, 9), DateUtils.convert(reportYear, 8))
-
-        // active baptised publishers
-
-        // regular publishers
-
-        // auxiliary pioneer individuals from service year
-
-        // new publishers this year
-
-        // inactive this year
-
-        // reactivated this year
-
-        // elders
-
-        // servants
-
     }
 
 }

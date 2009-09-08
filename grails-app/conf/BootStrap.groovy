@@ -28,7 +28,9 @@ class BootStrap {
                 new Member(lastname:'Savage', firstname:'Jude', birth:df.parse('1980-01-16'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1999-12-30')),
                 new Member(lastname:'Savage', firstname:'Saskia', birth:df.parse('1975-04-23'), isMale:false, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1999-12-30')),
                 new Member(lastname:'Savage', firstname:'Kieran', birth:df.parse('1970-05-11'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1999-12-30')),
-                new Member(lastname:'Savage', firstname:'John', birth:df.parse('1968-05-23'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1979-12-30'))
+                new Member(lastname:'Savage', firstname:'John', birth:df.parse('1968-05-23'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1979-12-30')),
+                new Member(lastname:'Savage', firstname:'Ethan', birth:df.parse('1960-09-01'), isMale:true, isPublisher:false, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1989-12-30')),
+                new Member(lastname:'Savage', firstname:'Allison', birth:df.parse('1968-02-21'), isMale:false, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1987-11-20'))
             ]
             members.each save
             
@@ -44,6 +46,14 @@ class BootStrap {
                 new MemberState(name:States.SERVANT, starting:cal.getTime(), member:members[4])
             ]
             servants.each save
+
+	    def cal1 = cal.clone()
+            cal1.set 2008,1,15
+	    def inactive = [
+                new MemberState(name:States.INACTIVE, starting:cal.getTime(), ending:cal1.getTime(), member:members[0]),
+                new MemberState(name:States.INACTIVE, starting:cal.getTime(), member:members[6])
+            ]
+            inactive.each save
 
             def serviceReports = [
                 new ServiceReport(month:1, year:2009, hours:16, publisher:members[0]),

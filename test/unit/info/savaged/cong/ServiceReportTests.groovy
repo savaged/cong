@@ -24,6 +24,7 @@ class ServiceReportTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
         mockDomain(ServiceReport)
+	mockDomain(Member)
     }
 
     protected void tearDown() {
@@ -49,5 +50,31 @@ class ServiceReportTests extends GrailsUnitTestCase {
         serviceReport.hours = 0.4
         assertFalse 'validation should have failed', serviceReport.validate()
         assertEquals 'hours is below minimum', 'min', serviceReport.errors.hours
+
+        def dob = Calendar.instance
+	dob.set 1968,9,30
+	def bap = dob.clone()
+	bap.set 1986,7,12
+        def publisher = new Member(
+	    lastname:'Savage',
+	    firstname:'David',
+	    birth:dob.time,
+	    immersion:bap.time)
+	def anotherServiceReport = new ServiceReport(
+	    hours:1,
+	    publisher:publisher,
+	    year:2009,
+	    month:8
+	)
+	assertTrue 'validation should not have failed', anotherServiceReport.validate()
+	anotherServiceReport.save()
+	def dupe = new ServiceReport(
+	    hours:1,
+	    publisher:publisher,
+	    year:2009,
+	    month:8
+	)
+        assertFalse 'validation should have failed', dupe.validate()
+        assertEquals 'publisher, lastname & firstname not unique', 'unique', dupe.errors.publisher
     }
 }

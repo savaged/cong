@@ -55,6 +55,7 @@ class ServiceReport {
         returnVisits(nullable:true)
         studies(nullable:true)
         comments(nullable:true)
+	publisher(unique:['year', 'month'])
     }
 
     Integer getYyyymm() {

@@ -65,8 +65,6 @@ class ExcelUploadServiceTests extends GrailsUnitTestCase {
     void testBindData() {
         excelUploadService.bindData file, 5, 2009
 	
-	// TODO test for inactive active flagging
-	
         assertEquals(4, excelUploadService.serviceReports.size())
         assertNotNull excelUploadService.serviceReportTotals
         

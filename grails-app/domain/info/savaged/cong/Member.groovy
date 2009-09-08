@@ -39,7 +39,6 @@ class Member {
     Date immersion
     Boolean isPublisher
     Date pioneerSchoolDate
-    String historisation
 
     static hasMany = [states:MemberState, serviceReports:ServiceReport]
     
@@ -55,7 +54,7 @@ class Member {
         groupUnit(nullable:true)
         bibleStudyConductor(nullable:true)
         pioneerSchoolDate(nullable:true)
-        historisation(nullable:true)
+	birth(unique:['lastname', 'firstname'])
     }
 
     void setBibleStudyConductor(Member bibleStudyConductor) {
