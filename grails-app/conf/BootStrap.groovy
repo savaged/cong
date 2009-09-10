@@ -165,9 +165,8 @@ class BootStrap {
 	        new MeetingAttendance(month:7, year:2009, meeting:Meeting.WT, meetings:4, total:360)
 	    ]
 	    meetingAttendances.each save
+	    log.debug 'bootstrapping test data complete'
         }
-
-	log.debug 'bootstrapping complete'
     }
     
     def destroy = {
