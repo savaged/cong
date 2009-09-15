@@ -6,7 +6,7 @@ import grails.util.*
 class BootStrap {
 
     def init = { servletContext ->
-        if (Environment.current != Environment.PRODUCTION) {
+        if (Environment.current == Environment.DEVELOPMENT) {
             
 	    log.debug 'bootstrapping a sample data-set for testing...'
 

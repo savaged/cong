@@ -31,7 +31,7 @@ environments {
     */
 	test {
 		dataSource {
-			dbCreate = "create-drop"
+			dbCreate = "update"
 			url = "jdbc:hsqldb:file:/Users/davidsavage/savaged.info/cong/reports/cong/db/testDb;shutdown=true"
 		}
 	}
