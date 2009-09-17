@@ -220,7 +220,7 @@ class ExcelUploadService {
         for (publisher in publishers) {
             def inactive = MemberState.findByNameAndMember(States.INACTIVE.toString(), publisher)
             if (inactive) {
-                if (!inactive.ending) {
+                if (!inactive.ended) {
                     log.debug(
 			"${publisher} not counted as active publisher due to being in an inactive state"
                     )
@@ -229,7 +229,7 @@ class ExcelUploadService {
             }
             def disfellowshipped = MemberState.findByNameAndMember(States.DISFELLOWSHIPPED.toString(), publisher)
             if (disfellowshipped) {
-                if (!disfellowshipped.ending) {
+                if (!disfellowshipped.ended) {
                     log.debug(
 			"${publisher} not counted as active publisher due to being in a disfellowshipped state"
                     )
