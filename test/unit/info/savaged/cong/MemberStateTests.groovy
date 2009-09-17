@@ -38,4 +38,20 @@ class MemberStateTests extends GrailsUnitTestCase {
         assertNull 'ending should not have an error', memberState.errors.ending
         assertEquals 'member is null', 'nullable', memberState.errors.member
     }
+
+    void testEnded() {
+	def cal = Calendar.instance
+	cal.set 2008,2,1
+	def memberState = new MemberState(
+	    name:States.INACTIVE,
+	    starting:cal.time
+	)
+	assertFalse 'the state should not be flagged as ended', memberState.ended
+	cal.clear()
+	memberState.ending = cal.time
+	assertFalse 'the state should not be flagged as ended', memberState.ended
+	cal.set 2009,1,1
+	memberState.ending = cal.time
+	assertTrue 'the state should be flagged as ended', memberState.ended
+    } 
 }

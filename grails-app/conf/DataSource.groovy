@@ -15,7 +15,7 @@ environments {
     development {
 		dataSource {
 			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			url = "jdbc:hsqldb:mem:devDB"
+			url = "jdbc:hsqldb:mem:devDb"
 		}
 	}
     /*
@@ -31,8 +31,14 @@ environments {
     */
 	test {
 		dataSource {
+			dbCreate = "create-drop"
+			url = "jdbc:hsqldb:mem:testDb"
+		}
+	}
+	prodcopy {
+		dataSource {
 			dbCreate = "update"
-			url = "jdbc:hsqldb:file:/Users/davidsavage/savaged.info/cong/reports/cong/db/testDb;shutdown=true"
+			url = "jdbc:hsqldb:file:/Users/davidsavage/savaged.info/cong/reports/cong/testDb/congDb;shutdown=true"
 		}
 	}
 	production {

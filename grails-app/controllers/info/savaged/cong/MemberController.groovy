@@ -40,31 +40,55 @@ class MemberController {
             
 	    def publishers = Member.findAllByIsPublisher(true)
 
+	    log.debug "filtering out long term inactive from the list of [${publishers.size()}] publishers"
+
 	    def publishersNotIncludingLongTermInactive = []
 	    def fromLessOneYear = from - 1000
 	    
 	    publishers.each { publisher ->
+
+	        log.debug "checking for inactive state(s) for [${publisher}]"
+
+		def isLongTermInactive = false
 		publisher?.states.each {
-		    def isLongTermInactive = false
+
+		    log.debug "checking [${it}] state for inactive type"
+		    
 		    if (it.name == States.INACTIVE) {
+
+			log.debug "checking if inactive state has not ended"
+
 			if (!it.ended) {
 			    def cal = Calendar.instance
 			    cal.setTime it.starting
+			
+			    log.debug "checking if the open inactive state started more than a year ago"
+
 			    def starting = DateUtils.convert(
 				cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
 			    if (starting < fromLessOneYear) {
+
+				log.debug "the open inactive state started more than a year ago, and is therefore flagged long term inactive"
+
 				isLongTermInactive = true
 			    }
 			}
 		    }
-		    if (!isLongTermInactive) {
-			publishersNotIncludingLongTermInactive << publisher
-		    }
+		}
+		if (!isLongTermInactive) {
+				
+		    log.debug "the member is not long term inactive, therefore is added for further checking"
+			
+		    publishersNotIncludingLongTermInactive << publisher
 		}
 	    }
+	    log.debug "filtered out long term inactive from the list of publishers, leaving [${publishersNotIncludingLongTermInactive.size()}]"
 
 	    def inactiveMembers = []
 	    def previousMonthsRange = DateUtils.previousMonthsRange(6, from)
+
+	    log.debug "counting any not reporting in the previous six months since [${from}], from the list of publishers"
+
 	    publishersNotIncludingLongTermInactive.each {
 	        def hours = 0
 	        it?.serviceReports.each {
@@ -73,9 +97,14 @@ class MemberController {
 		    }
 		}
 		if (hours < 1) {
+	    
+	            log.debug "[${it}] has not reported in the previous six months since [${from}] and is therefore added to the inactive list"
+
 		    inactiveMembers << it
 		}
 	    }	    
+	    log.debug "counted [${inactiveMembers.size()}] not reporting in the previous six months since [${from}]"
+
 	    render view:'list', model:[
 	        memberInstanceList:inactiveMembers, 
 		memberInstanceTotal:inactiveMembers.size()]

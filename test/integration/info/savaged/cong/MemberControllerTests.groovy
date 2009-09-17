@@ -70,5 +70,12 @@ class MemberControllerTests extends ControllerUnitTestCase {
         }
         assertEquals 'list', renderArgs.view
         assertEquals 1, renderArgs.model.memberInstanceTotal
+
+	controller.params.with {
+	    starting_year = '2009'
+	    starting_month = '9'
+	}
+	controller.inactive()
+        assertEquals 3, renderArgs.model.memberInstanceTotal
     }
 }

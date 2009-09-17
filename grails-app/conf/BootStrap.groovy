@@ -6,9 +6,10 @@ import grails.util.*
 class BootStrap {
 
     def init = { servletContext ->
-        if (Environment.current == Environment.DEVELOPMENT) {
+        if (Environment.current != Environment.PRODUCTION &&
+	    Environment.current != Environment.CUSTOM) { 
             
-	    log.debug 'bootstrapping a sample data-set for testing...'
+	    log.debug "bootstrapping a sample data-set for testing, for the [${Environment.current}] environment..."
 
             def save = {
 		if (!it.validate()) {
@@ -30,7 +31,8 @@ class BootStrap {
                 new Member(lastname:'Savage', firstname:'Kieran', birth:df.parse('1970-05-11'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1999-12-30')),
                 new Member(lastname:'Savage', firstname:'John', birth:df.parse('1968-05-23'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1979-12-30')),
                 new Member(lastname:'Savage', firstname:'Ethan', birth:df.parse('1960-09-01'), isMale:true, isPublisher:false, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1989-12-30')),
-                new Member(lastname:'Savage', firstname:'Allison', birth:df.parse('1968-02-21'), isMale:false, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1987-11-20'))
+                new Member(lastname:'Savage', firstname:'Allison', birth:df.parse('1968-02-21'), isMale:false, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1987-11-20')),
+                new Member(lastname:'Savage', firstname:'Dave', birth:df.parse('1969-09-30'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1986-04-10'))
             ]
             members.each save
             
@@ -57,6 +59,8 @@ class BootStrap {
 
             def serviceReports = [
                 new ServiceReport(month:1, year:2009, hours:16, publisher:members[0]),
+                new ServiceReport(month:2, year:2009, hours:6, publisher:members[0]),
+                new ServiceReport(month:3, year:2009, hours:5, publisher:members[0]),
 
                 new ServiceReport(month:1, year:2009, hours:75, publisher:members[1]),
                 new ServiceReport(month:2, year:2009, hours:76, publisher:members[1]),
@@ -90,14 +94,18 @@ class BootStrap {
                 new ServiceReport(month:6, year:2009, hours:12, publisher:members[4]),
                 new ServiceReport(month:7, year:2009, hours:11, publisher:members[4]),
                 
-		new ServiceReport(month:6, year:2009, hours:1, publisher:members[5])
+		new ServiceReport(month:6, year:2009, hours:1, publisher:members[5]),
+
+		new ServiceReport(month:1, year:2009, hours:1, publisher:members[7]),
+		new ServiceReport(month:2, year:2009, hours:1, publisher:members[7]),
+		new ServiceReport(month:3, year:2009, hours:1, publisher:members[7])
             ]
             serviceReports.each save
 
 	    def activePublisherCounts = [
-	        new ActivePublisherCount(month:1, year:2009, publishers:5),
-	        new ActivePublisherCount(month:2, year:2009, publishers:4),
-	        new ActivePublisherCount(month:3, year:2009, publishers:4),
+	        new ActivePublisherCount(month:1, year:2009, publishers:6),
+	        new ActivePublisherCount(month:2, year:2009, publishers:6),
+	        new ActivePublisherCount(month:3, year:2009, publishers:6),
 	        new ActivePublisherCount(month:4, year:2009, publishers:4),
 	        new ActivePublisherCount(month:5, year:2009, publishers:4),
 	        new ActivePublisherCount(month:6, year:2009, publishers:5),
@@ -106,14 +114,14 @@ class BootStrap {
 	    activePublisherCounts.each save
 
 	    def serviceReportTotals = [
-	        new ServiceReportTotals(month:1, year:2009, publishers:3, hours:46, category:Categories.PUBLISHERS),
+	        new ServiceReportTotals(month:1, year:2009, publishers:4, hours:47, category:Categories.PUBLISHERS),
 	        new ServiceReportTotals(month:1, year:2009, publishers:1, hours:50, category:Categories.AUXILIARY_PIONEERS),
 	        new ServiceReportTotals(month:1, year:2009, publishers:1, hours:75, category:Categories.REGULAR_PIONEERS),
 		
-		new ServiceReportTotals(month:2, year:2009, publishers:3, hours:48, category:Categories.PUBLISHERS),
+		new ServiceReportTotals(month:2, year:2009, publishers:5, hours:54, category:Categories.PUBLISHERS),
 	        new ServiceReportTotals(month:2, year:2009, publishers:1, hours:76, category:Categories.REGULAR_PIONEERS),
 		
-                new ServiceReportTotals(month:3, year:2009, publishers:2, hours:30, category:Categories.PUBLISHERS),
+                new ServiceReportTotals(month:3, year:2009, publishers:4, hours:36, category:Categories.PUBLISHERS),
 	        new ServiceReportTotals(month:3, year:2009, publishers:1, hours:50, category:Categories.AUXILIARY_PIONEERS),
 	        new ServiceReportTotals(month:3, year:2009, publishers:1, hours:75, category:Categories.REGULAR_PIONEERS),
 		
