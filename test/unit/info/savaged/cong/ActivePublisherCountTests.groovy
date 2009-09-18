@@ -34,8 +34,7 @@ class ActivePublisherCountTests extends GrailsUnitTestCase {
         def activePublisherCount = new ActivePublisherCount()
         assertFalse 'validation should have failed', activePublisherCount.validate()
         assertEquals 'publishers is null', 'nullable', activePublisherCount.errors.publishers
-        assertEquals 'month is null', 'nullable', activePublisherCount.errors.month
-        assertEquals 'year is null', 'nullable', activePublisherCount.errors.year
+        assertEquals 'yyyymm is null', 'nullable', activePublisherCount.errors.yyyymm
 
         activePublisherCount.publishers = 0
         assertFalse 'validation should have failed', activePublisherCount.validate()

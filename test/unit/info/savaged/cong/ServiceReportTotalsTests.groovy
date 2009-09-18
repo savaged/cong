@@ -33,8 +33,7 @@ class ServiceReportTotalsTests extends GrailsUnitTestCase {
     void testConstraints() {
         def serviceReportTotals = new ServiceReportTotals()
         assertFalse 'validation should have failed', serviceReportTotals.validate()
-        assertEquals 'month is null', 'nullable', serviceReportTotals.errors.month
-        assertEquals 'year is null', 'nullable', serviceReportTotals.errors.year
+        assertEquals 'yyyymm is null', 'nullable', serviceReportTotals.errors.yyyymm
         assertEquals 'category is null', 'nullable', serviceReportTotals.errors.category
         
         assertNull 'books should not have an error', serviceReportTotals.errors.books

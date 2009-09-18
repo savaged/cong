@@ -44,17 +44,16 @@ class ExcelUploadService {
     def serviceReports = []
     def serviceReportTotals
     def activePublisherCount
-    def reportMonth
-    def reportYear
+    def reportYyyymm
 
     def bindData(File file, Integer month, Integer year) {
         serviceReports = []
         serviceReportTotals = null
         activePublisherCount = null
-        reportMonth = month
-        reportYear = year
 
-        log.debug("opening xl report file at: " + file.getName())
+	reportYyyymm = DateUtils.convert(year, month)
+
+        log.debug "opening xl report file at: [${file.getName()}], using the year and month: [${reportYyyymm}]"
         InputStream inputStream = new FileInputStream(file)
         POIFSFileSystem poiFsFileSystem = new POIFSFileSystem(inputStream)
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook(poiFsFileSystem)
@@ -97,8 +96,8 @@ class ExcelUploadService {
             if (serviceReport.save(flush:true)) {
                 log.debug('persisted service report for ' +
                     serviceReport?.publisher?.lastname + ', ' +
-                    serviceReport?.publisher?.firstname + ' with month ' +
-                    serviceReport?.month + ' and year ' + serviceReport?.year)
+                    serviceReport?.publisher?.firstname + ' with year and  month ' +
+                    serviceReport?.yyyymm)
             } else {
                 serviceReport.errors.each {
                     log.debug "failed to save ${serviceReport} due to: ${it}"
@@ -127,7 +126,7 @@ class ExcelUploadService {
         
         if (activePublisherCount.save(flush:true)) {
             log.debug(
-"Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.month}/${activePublisherCount.year}"
+		"Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.yyyymm}"
             )
         } else {
             activePublisherCount.errors.each {
@@ -140,7 +139,7 @@ class ExcelUploadService {
 
         log.debug 'Retrieving reports...'
 
-        log.debug 'using start month: ' + reportMonth + ' and year: ' + reportYear
+        log.debug "using start date with the year and month ${reportYyyymm}" 
         Iterator rows = hssfSheet.rowIterator()
         int rowCount = 0
         while (rows.hasNext()) {
@@ -151,8 +150,7 @@ class ExcelUploadService {
                 break
             }
             def report = new ServiceReport()
-            report.month = reportMonth
-            report.year = reportYear
+	    report.yyyymm = reportYyyymm
 
             rowCount++
             log.debug("processing row: " + rowCount)
@@ -239,7 +237,7 @@ class ExcelUploadService {
             activePublishers.put(publisher.fullname, publisher)
             log.debug "${publisher} counted as active publisher"
         }
-        activePublisherCount = new ActivePublisherCount(month:reportMonth, year:reportYear, publishers:activePublishers.size())
+        activePublisherCount = new ActivePublisherCount(yyyymm:reportYyyymm, publishers:activePublishers.size())
         log.debug "${activePublisherCount} of ${activePublisherCount.publishers}"
 
         activePublishers
@@ -252,9 +250,9 @@ class ExcelUploadService {
 	def activePublishers = retrieveActivePublishers()
 
         serviceReportTotals = [
-            new ServiceReportTotals(category:Categories.PUBLISHERS, month:reportMonth, year:reportYear),
-            new ServiceReportTotals(category:Categories.AUXILIARY_PIONEERS, month:reportMonth, year:reportYear),
-            new ServiceReportTotals(category:Categories.REGULAR_PIONEERS, month:reportMonth, year:reportYear)
+            new ServiceReportTotals(category:Categories.PUBLISHERS, yyyymm:reportYyyymm),
+            new ServiceReportTotals(category:Categories.AUXILIARY_PIONEERS, yyyymm:reportYyyymm),
+            new ServiceReportTotals(category:Categories.REGULAR_PIONEERS, yyyymm:reportYyyymm)
         ]
 
         for (serviceReport in serviceReports) {

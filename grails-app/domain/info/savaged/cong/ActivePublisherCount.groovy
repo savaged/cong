@@ -20,23 +20,15 @@ package info.savaged.cong
 
 class ActivePublisherCount {
 
-    Integer month
-    Integer year
+    Integer yyyymm
     Integer publishers
 
-    static transients = ['yyyymm']
-
     static constraints = {
-        year(min:1901)
-        month(min:1)
+        yyyymm(min:190101)
         publishers(min:1)
     }
 
-    Integer getYyyymm() {
-	info.savaged.cong.utils.DateUtils.convert(year, month)
-    }
-
     String toString() {
-        return "Active publishers count for ${month}/${year}"
+        return "Active publishers count for ${yyyymm}"
     }
 }

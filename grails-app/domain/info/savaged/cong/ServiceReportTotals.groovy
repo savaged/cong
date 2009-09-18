@@ -23,8 +23,7 @@ enum Categories {PUBLISHERS, AUXILIARY_PIONEERS, REGULAR_PIONEERS}
 class ServiceReportTotals {
 
     Categories category
-    Integer month
-    Integer year
+    Integer yyyymm
     Integer publishers = 0
     Integer books = 0
     Integer brochures = 0
@@ -33,11 +32,8 @@ class ServiceReportTotals {
     Integer returnVisits = 0
     Integer studies = 0
 
-    static transients = ['yyyymm']
-
     static constraints = {
-	year(min:1901)
-	month(min:1)
+	yyyymm(min:190101)
 	hours(min:1)
 	publishers(min:1)
         books(nullable:true)
@@ -47,11 +43,7 @@ class ServiceReportTotals {
         studies(nullable:true)
     }
 
-    Integer getYyyymm() {
-	info.savaged.cong.utils.DateUtils.convert(year, month)
-    }
-
     String toString() {
-        return """${category} for ${month}/${year}"""
+        return "${category} for ${yyyymm}"
     }
 }

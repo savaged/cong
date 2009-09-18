@@ -37,11 +37,9 @@ class MeetingAttendanceTests extends GrailsUnitTestCase {
     void testConstraints() {
         assertFalse 'validation should have failed', meetingAttendance.validate()
         assertEquals 'meeting is null', 'nullable', meetingAttendance.errors.meeting
-        assertEquals 'meeting is null', 'nullable', meetingAttendance.errors.meeting
         assertEquals 'meetings is null', 'nullable', meetingAttendance.errors.meetings
         assertEquals 'total is null', 'nullable', meetingAttendance.errors.total
-        assertEquals 'month is null', 'nullable', meetingAttendance.errors.month
-        assertEquals 'year is null', 'nullable', meetingAttendance.errors.year
+        assertEquals 'yyyymm is null', 'nullable', meetingAttendance.errors.yyyymm
     }
 
     void testGetAverage() {

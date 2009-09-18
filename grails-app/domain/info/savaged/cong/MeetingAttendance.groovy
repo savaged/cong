@@ -27,20 +27,18 @@ enum Meeting {CBS, SM, PT, WT}
  */
 class MeetingAttendance {
 
-    Integer month
-    Integer year
+    Integer yyyymm
     Integer meetings
     Integer total
     Meeting meeting
     
     static constraints = {
-        year(min:1901)
-        month(min:1)
+        yyyymm(min:190101)
         meetings(min:1)
         total(min:1)
     }
 
-    static transients = ['average', 'yyyymm']
+    static transients = ['average']
 
     Integer getAverage() {
         if (total != null && total > 0 && meetings != null && meetings > 0) {
@@ -48,11 +46,7 @@ class MeetingAttendance {
         }
     }
 
-    Integer getYyyymm() {
-	info.savaged.cong.utils.DateUtils.convert(year, month)
-    }
-
     String toString() {
-        return """${meeting}:${month}/${year}"""
+        return """${meeting}:${yyyymm}"""
     }
 }

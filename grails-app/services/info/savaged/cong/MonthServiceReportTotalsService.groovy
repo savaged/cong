@@ -22,24 +22,25 @@ import org.springframework.util.Assert
 
 class MonthServiceReportTotalsService {
 
-    ServiceReportTotalsTableDto build(Integer month, Integer year) {
+    ServiceReportTotalsTableDto build(Integer yyyymm) {
 
-        log.debug "Building service report totals and active publisher count for ${month}/${year}..."
+        log.debug "Building service report totals and active publisher count for ${yyyymm}..."
 
         def table = new ServiceReportTotalsTableDto()
-        def activePublisherCount = ActivePublisherCount.findByMonthAndYear(month, year)
+        def activePublisherCount = ActivePublisherCount.findByYyyymm(yyyymm)
         if (!activePublisherCount) {
-            log.debug "No active publishers count found for ${month}/${year}"
+            log.debug "No active publishers count found for ${yyyymm}"
         } else {
             table.activePubCount = activePublisherCount.publishers
         }
         def publishersRow
         def auxPioneersRow
         def regPioneersRow
-        def serviceReportTotals = ServiceReportTotals.findAllByMonthAndYear(month, year)
+
+        def serviceReportTotals = ServiceReportTotals.findAllByYyyymm(yyyymm)
         
         if (serviceReportTotals.size() <= 0) {
-            log.debug "No service report totals found for ${month}/${year}"
+            log.debug "No service report totals found for ${yyyymm}"
         } else {
 
             log.debug "summing ${serviceReportTotals.size()} service report totals}"

@@ -36,8 +36,7 @@ class ServiceReportTests extends GrailsUnitTestCase {
         assertFalse 'validation should have failed', serviceReport.validate()
         assertEquals 'hours is null', 'nullable', serviceReport.errors.hours
         assertEquals 'publisher is null', 'nullable', serviceReport.errors.publisher
-        assertEquals 'month is null', 'nullable', serviceReport.errors.month
-        assertEquals 'year is null', 'nullable', serviceReport.errors.year
+        assertEquals 'yyyymm is null', 'nullable', serviceReport.errors.yyyymm
 
         assertNull 'isAuxPioneer should not have an error', serviceReport.errors.isAuxPioneer
         assertNull 'books should not have an error', serviceReport.errors.books
@@ -63,16 +62,14 @@ class ServiceReportTests extends GrailsUnitTestCase {
 	def anotherServiceReport = new ServiceReport(
 	    hours:1,
 	    publisher:publisher,
-	    year:2009,
-	    month:8
+	    yyyymm:200908
 	)
 	assertTrue 'validation should not have failed', anotherServiceReport.validate()
 	anotherServiceReport.save()
 	def dupe = new ServiceReport(
 	    hours:1,
 	    publisher:publisher,
-	    year:2009,
-	    month:8
+	    yyyymm:200908
 	)
         assertFalse 'validation should have failed', dupe.validate()
         assertEquals 'publisher, lastname & firstname not unique', 'unique', dupe.errors.publisher

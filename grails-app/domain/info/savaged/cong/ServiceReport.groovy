@@ -25,8 +25,7 @@ package info.savaged.cong
  */
 class ServiceReport {
 
-    Integer month
-    Integer year
+    Integer yyyymm
     Boolean isAuxPioneer
     Integer books
     Integer brochures
@@ -37,8 +36,6 @@ class ServiceReport {
     String comments
     Member publisher
 
-    static transients = ['yyyymm']
-
     static belongsTo = Member
 
     ServiceReport() {
@@ -46,8 +43,7 @@ class ServiceReport {
     }
 
     static constraints = {
-        year(min:1901)
-        month(min:1)
+        yyyymm(min:1901)
         hours(min:1)
         books(nullable:true)
         brochures(nullable:true)
@@ -55,14 +51,10 @@ class ServiceReport {
         returnVisits(nullable:true)
         studies(nullable:true)
         comments(nullable:true)
-	publisher(unique:['year', 'month'])
-    }
-
-    Integer getYyyymm() {
-	info.savaged.cong.utils.DateUtils.convert(year, month)
+	publisher(unique:['yyyymm'])
     }
 
     String toString() {
-        return """${publisher} for ${month}/${year}"""
+        return """${publisher} for ${yyyymm}"""
     }
 }
