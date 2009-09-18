@@ -18,11 +18,13 @@ along with cong.  If not, see <http://www.gnu.org/licenses/>.
 */
 package info.savaged.cong
 
-import org.springframework.util.Assert
+import info.savaged.cong.utils.DateUtils
 
 class MonthServiceReportTotalsService {
 
-    ServiceReportTotalsTableDto build(Integer yyyymm) {
+    ServiceReportTotalsTableDto build(Integer month, Integer year) {
+
+	def yyyymm = DateUtils.convert(year, month)
 
         log.debug "Building service report totals and active publisher count for ${yyyymm}..."
 

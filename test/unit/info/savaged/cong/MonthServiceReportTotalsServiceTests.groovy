@@ -49,7 +49,7 @@ class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
     }
 
     void testBuild() {
-        ServiceReportTotalsTableDto serviceReportTotals = monthServiceReportTotalsService.build(200905)
+        ServiceReportTotalsTableDto serviceReportTotals = monthServiceReportTotalsService.build(5, 2009)
         assertNotNull serviceReportTotals
         assertNotNull serviceReportTotals.rows
         assertNotNull serviceReportTotals.activePubCount

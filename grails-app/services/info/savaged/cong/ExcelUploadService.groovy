@@ -212,8 +212,9 @@ class ExcelUploadService {
     private Map retrieveActivePublishers() {
 	
 	def activePublishers = [:]
-
-        def publishers = Member.findAllByIsPublisher(true)
+	def activeBaptizedPublisherCount = 0
+        
+	def publishers = Member.findAllByIsPublisher(true)
 
         for (publisher in publishers) {
             def inactive = MemberState.findByNameAndMember(States.INACTIVE.toString(), publisher)
@@ -236,8 +237,16 @@ class ExcelUploadService {
             }
             activePublishers.put(publisher.fullname, publisher)
             log.debug "${publisher} counted as active publisher"
+
+	    if (publisher.baptized) { 
+		activeBaptizedPublisherCount++
+		log.debug "${publisher} counted as baptized active publisher"
+	    }
         }
-        activePublisherCount = new ActivePublisherCount(yyyymm:reportYyyymm, publishers:activePublishers.size())
+        activePublisherCount = new ActivePublisherCount(
+	    yyyymm:reportYyyymm, 
+	    publishers:activePublishers.size(),
+	    baptizedPublishers:activeBaptizedPublisherCount)
         log.debug "${activePublisherCount} of ${activePublisherCount.publishers}"
 
         activePublishers

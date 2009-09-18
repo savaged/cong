@@ -42,7 +42,7 @@ class Member {
 
     static hasMany = [states:MemberState, serviceReports:ServiceReport]
     
-    static transients = ['fullname']
+    static transients = ['fullname', 'baptized']
 
     Member() {
         isMale = isPublisher = false
@@ -62,9 +62,21 @@ class Member {
     }
 
     String getFullname() {
-        return """${lastname}, ${firstname}"""
+        return "${lastname}, ${firstname}"
     }
 
+    Boolean getBaptized() {
+        Boolean baptized = false
+        if (immersion) {
+            Calendar cal = Calendar.instance
+            cal.set 1914,1,1
+            if (immersion > cal.time) {
+                baptized = true
+            }
+        }
+        baptized
+    }
+ 
     String toString() {
         return fullname
     }

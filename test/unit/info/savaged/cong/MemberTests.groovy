@@ -30,6 +30,24 @@ class MemberTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
+    void testBaptized() {
+	def member = new Member()
+        member.lastname = member.firstname = ''
+	assertFalse 'the baptized flag should be derived as false', member.baptized
+
+        def dob = Calendar.instance
+	dob.set 1968, 9, 30
+	def bap = Calendar.instance
+	bap.set 1987, 6, 12
+	def anotherMember = new Member(
+	    lastname:'Savage',
+	    firstname:'David',
+	    birth:dob.time,
+	    immersion:bap.time
+	)
+	assertTrue 'the baptized flag should be derived as true', anotherMember.baptized
+    }
+
     void testConstraints() {
         def member = new Member()
         member.lastname = member.firstname = ''

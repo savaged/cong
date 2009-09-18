@@ -22,10 +22,16 @@ class ActivePublisherCount {
 
     Integer yyyymm
     Integer publishers
+    Integer baptizedPublishers
+    Integer newPublishers
+    Integer reactivatedPublishers
 
     static constraints = {
         yyyymm(min:190101)
         publishers(min:1)
+	baptizedPublishers(min:1)
+	newPublishers(nullable:true)
+	reactivatedPublishers(nullable:true)
     }
 
     String toString() {
