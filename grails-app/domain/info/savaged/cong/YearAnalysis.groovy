@@ -96,19 +96,19 @@ class YearAnalysis {
     static constraints = {
         serviceYearStart unique:true, range:2008..2018
 
-        ptAverage nullable:false
-        wtAverage nullable:false
-        cbsAverage nullable:false
-        smAverage nullable:false
+        ptAverage min:1
+        wtAverage min:1
+        cbsAverage min:1
+        smAverage min:1
 
-        activePublishers nullable:false
-        activeBaptisedPublishers nullable:false
-        regularPublishers nullable:false
+        activePublishers min:1
+        activeBaptisedPublishers min:1
+        regularPublishers min:1
         auxiliaryPioneers nullable:false
         newPublishers nullable:false
         inactivePublishers nullable:false
         reactivatedPublishers nullable:false
-        elders nullable:false
+        elders min:1
         servants nullable:false
     }
 }
