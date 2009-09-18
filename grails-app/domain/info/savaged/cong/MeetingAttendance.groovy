@@ -36,6 +36,7 @@ class MeetingAttendance {
         yyyymm(min:190101)
         meetings(min:1)
         total(min:1)
+	yyyymm(unique:['meeting'])
     }
 
     static transients = ['average']

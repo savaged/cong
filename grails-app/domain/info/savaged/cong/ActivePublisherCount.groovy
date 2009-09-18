@@ -32,6 +32,7 @@ class ActivePublisherCount {
 	baptizedPublishers(min:1)
 	newPublishers(nullable:true)
 	reactivatedPublishers(nullable:true)
+	yyyymm(unique:tree)
     }
 
     String toString() {
