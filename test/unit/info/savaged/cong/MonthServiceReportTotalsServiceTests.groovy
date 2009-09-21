@@ -28,6 +28,7 @@ class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
         super.setUp()
 
         mockLogging(MonthServiceReportTotalsService, true)
+        mockLogging(PublishersService, true)
 
 	mockDomain(Member)
 	mockDomain(ServiceReport)
@@ -35,6 +36,7 @@ class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
         mockDomain(ServiceReportTotals)
 
 	monthServiceReportTotalsService = new MonthServiceReportTotalsService()
+	monthServiceReportTotalsService.publishersService = new PublishersService()
     }
 
     protected void tearDown() {

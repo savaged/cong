@@ -27,6 +27,7 @@ class MemberControllerTests extends ControllerUnitTestCase {
         super.setUp()
         // BootStrap has all the data loaded already
         mockLogging(MemberController, true)
+        mockLogging(PublishersService, true)
     }
 
     protected void tearDown() {
@@ -66,6 +67,7 @@ class MemberControllerTests extends ControllerUnitTestCase {
                 starting_year = '2009'
                 starting_month = '8'
             }
+	    publishersService = new PublishersService()
             inactive()
         }
         assertEquals 'list', renderArgs.view

@@ -22,6 +22,8 @@ import info.savaged.cong.utils.DateUtils
 
 class MonthServiceReportTotalsService {
 
+    def publishersService
+
     boolean transactional = true
 
     ServiceReportTotalsTableDto build(Integer month, Integer year) {
@@ -44,7 +46,7 @@ class MonthServiceReportTotalsService {
         ]
 
 	def serviceReports = ServiceReport.findAllByYyyymm(yyyymm)
-	def activePublishers = retrieveActivePublishers(yyyymm)
+	def activePublishers = publishersService.retrieveActivePublishers(yyyymm)
 
         log.debug( 
 	    "processing [${serviceReports?.size()}] service reports and [${activePublishers?.size()}] active publishers"
@@ -93,54 +95,9 @@ class MonthServiceReportTotalsService {
         row.studies += (serviceReport.studies ? serviceReport.studies : 0)
     }
 
-    private Map retrieveActivePublishers(Integer yyyymm) {
-	
-	def activePublishers = [:]
-        
-	def publishers = Member.findAllByIsPublisher(true)
-
-        for (publisher in publishers) {
-            def inactive = MemberState.findByNameAndMember(States.INACTIVE.toString(), publisher)
-            if (inactive) {
-                if (!inactive.ended) {
-                    log.debug(
-			"${publisher} not counted as active publisher due to being in an inactive state"
-                    )
-                    continue
-                }
-            }
-            def disfellowshipped = MemberState.findByNameAndMember(States.DISFELLOWSHIPPED.toString(), publisher)
-            if (disfellowshipped) {
-                if (!disfellowshipped.ended) {
-                    log.debug(
-			"${publisher} not counted as active publisher due to being in a disfellowshipped state"
-                    )
-                    continue
-                }
-            }
-            activePublishers.put(publisher.fullname, publisher)
-            log.debug "${publisher} counted as active publisher"
-        }
-        activePublishers
-    }
-
-    private Integer retrieveActiveBaptizedPublisherCount(Map activePublishers) {
-	
-	def activeBaptizedPublisherCount = 0
-
-        for (publisher in activePublishers.values()) {
-
-	    if (publisher.baptized) { 
-		activeBaptizedPublisherCount++
-		log.debug "${publisher} counted as baptized active publisher"
-	    }
-	}
-	activeBaptizedPublisherCount 
-    }
-
     private void persist(List serviceReportTotals) {
 
-        log.debug 'Persisting ' + serviceReportTotals.size() + ' service report totals...'
+        log.debug "Persisting [${serviceReportTotals.size()}] service report totals..."
 
 	def yyyymm
 
@@ -158,26 +115,7 @@ class MonthServiceReportTotalsService {
                 }
             }
         }
-
-        log.debug 'Persisting active publisher count...'
-
-	def activePublishers = retrieveActivePublishers(yyyymm)
-	def activeBaptizedPublisherCount = retrieveActiveBaptizedPublisherCount(activePublishers)
-
-        def activePublisherCount = new ActivePublisherCount(
-	    yyyymm:yyyymm, 
-	    publishers:activePublishers.size(),
-	    baptizedPublishers:activeBaptizedPublisherCount)
-        
-        if (activePublisherCount.save(flush:true)) {
-            log.debug(
-		"Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.yyyymm}"
-            )
-        } else {
-            activePublisherCount.errors.each {
-                log.debug "failed to save ${activePublisherCount} due to: ${it}"
-            }
-        }
+        publishersService.persistActivePublisherCounts(yyyymm)
     }
 
     private ServiceReportTotalsTableDto load(Integer yyyymm) {

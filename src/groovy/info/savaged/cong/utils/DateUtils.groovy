@@ -23,7 +23,7 @@ class DateUtils {
    static Map convert(Integer yyyymm) {
        Integer y = 1901
        Integer m = 1
-       if (yyyymm != null) {
+       if (yyyymm != null && yyyymm > 190101) {
 	   y = Math.round(yyyymm / 100)
 	   m = yyyymm - (y * 100)
        }
