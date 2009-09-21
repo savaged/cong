@@ -26,8 +26,6 @@ import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletRequest
 
 class ExcelUploadControllerTests extends ControllerUnitTestCase {
 
-    def excelUploadService
-
     protected void setUp() {
         super.setUp()
         mockLogging(ExcelUploadService, true)

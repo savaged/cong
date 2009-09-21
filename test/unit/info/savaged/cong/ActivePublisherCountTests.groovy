@@ -38,6 +38,5 @@ class ActivePublisherCountTests extends GrailsUnitTestCase {
 
         activePublisherCount.publishers = 0
         assertFalse 'validation should have failed', activePublisherCount.validate()
-        assertEquals 'publishers is below minimum', 'min', activePublisherCount.errors.publishers
     }
 }

@@ -28,8 +28,8 @@ class ActivePublisherCount {
 
     static constraints = {
         yyyymm(min:190101)
-        publishers(min:1)
-	baptizedPublishers(min:1)
+        publishers(min:0)
+	baptizedPublishers(min:0)
 	newPublishers(nullable:true)
 	reactivatedPublishers(nullable:true)
 	yyyymm(unique:true)

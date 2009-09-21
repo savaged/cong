@@ -42,14 +42,10 @@ class ExcelUploadService {
     boolean transactional = true
 
     def serviceReports = []
-    def serviceReportTotals
-    def activePublisherCount
     def reportYyyymm
 
     def bindData(File file, Integer month, Integer year) {
         serviceReports = []
-        serviceReportTotals = null
-        activePublisherCount = null
 
 	reportYyyymm = DateUtils.convert(year, month)
 
@@ -63,9 +59,7 @@ class ExcelUploadService {
         retrieveReports(hssfSheet)
 
         validateReports()
-        buildMonthTotals()
         persistReports()
-
     }
 
     private void validateReports() {
@@ -102,35 +96,6 @@ class ExcelUploadService {
                 serviceReport.errors.each {
                     log.debug "failed to save ${serviceReport} due to: ${it}"
                 }
-            }
-        }
-    }
-
-    private void persistMonthTotals() {
-
-        log.debug 'Persisting ' + serviceReportTotals.size() + ' service report totals...'
-
-        for (totals in serviceReportTotals) {
-            if (totals.save(flush:true)) {
-                log.debug(
-"Persisting service report totals: ${totals} with ${totals?.hours} hours"
-                )
-            } else {
-                totals.errors.each {
-                    log.debug "failed to save ${totals} due to: ${it}"
-                }
-            }
-        }
-
-        log.debug 'Persisting active publisher count...'
-        
-        if (activePublisherCount.save(flush:true)) {
-            log.debug(
-		"Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.yyyymm}"
-            )
-        } else {
-            activePublisherCount.errors.each {
-                log.debug "failed to save ${activePublisherCount} due to: ${it}"
             }
         }
     }
@@ -207,102 +172,6 @@ class ExcelUploadService {
             match = false
         }
         return match
-    }
-
-    private Map retrieveActivePublishers() {
-	
-	def activePublishers = [:]
-	def activeBaptizedPublisherCount = 0
-        
-	def publishers = Member.findAllByIsPublisher(true)
-
-        for (publisher in publishers) {
-            def inactive = MemberState.findByNameAndMember(States.INACTIVE.toString(), publisher)
-            if (inactive) {
-                if (!inactive.ended) {
-                    log.debug(
-			"${publisher} not counted as active publisher due to being in an inactive state"
-                    )
-                    continue
-                }
-            }
-            def disfellowshipped = MemberState.findByNameAndMember(States.DISFELLOWSHIPPED.toString(), publisher)
-            if (disfellowshipped) {
-                if (!disfellowshipped.ended) {
-                    log.debug(
-			"${publisher} not counted as active publisher due to being in a disfellowshipped state"
-                    )
-                    continue
-                }
-            }
-            activePublishers.put(publisher.fullname, publisher)
-            log.debug "${publisher} counted as active publisher"
-
-	    if (publisher.baptized) { 
-		activeBaptizedPublisherCount++
-		log.debug "${publisher} counted as baptized active publisher"
-	    }
-        }
-        activePublisherCount = new ActivePublisherCount(
-	    yyyymm:reportYyyymm, 
-	    publishers:activePublishers.size(),
-	    baptizedPublishers:activeBaptizedPublisherCount)
-        log.debug "${activePublisherCount} of ${activePublisherCount.publishers}"
-
-        activePublishers
-    }
-    
-    private void buildMonthTotals() {
-
-        log.debug 'Calculating month totals...'
-        
-	def activePublishers = retrieveActivePublishers()
-
-        serviceReportTotals = [
-            new ServiceReportTotals(category:Categories.PUBLISHERS, yyyymm:reportYyyymm),
-            new ServiceReportTotals(category:Categories.AUXILIARY_PIONEERS, yyyymm:reportYyyymm),
-            new ServiceReportTotals(category:Categories.REGULAR_PIONEERS, yyyymm:reportYyyymm)
-        ]
-
-        for (serviceReport in serviceReports) {
-
-            if (activePublishers.get(serviceReport.publisher.fullname)) {
-
-                def regPioneer = MemberState.findByNameAndMember(States.REGULAR_PIONEER.toString(), serviceReport.publisher)
-                if (regPioneer) {
-                    if (!regPioneer.ending) {
-                        updateRow(serviceReportTotals[2], serviceReport)
-                        log.debug(
-				"Added service report for ${serviceReport?.publisher} as regular pioneer"
-                        )
-                    }
-                } else {
-                    if (serviceReport.isAuxPioneer) {
-                        updateRow(serviceReportTotals[1], serviceReport)
-                        log.debug(
-				"Added service report for  ${serviceReport?.publisher} as auxiliary pioneer"
-                        )
-                    } else {
-                        updateRow(serviceReportTotals[0], serviceReport)
-                        log.debug(
-    				"Added service report for ${serviceReport?.publisher} as publisher"
-                        )
-                    }
-                }
-            }
-        }
-
-        persistMonthTotals()
-    }
-
-    private void updateRow(row, serviceReport) {
-        row.publishers++
-        row.books += (serviceReport.books ? serviceReport.books : 0)
-        row.brochures += (serviceReport.brochures ? serviceReport.brochures : 0)
-        row.hours += serviceReport.hours
-        row.magazines += (serviceReport.magazines ? serviceReport.magazines : 0)
-        row.returnVisits += (serviceReport.returnVisits ? serviceReport.returnVisits : 0)
-        row.studies += (serviceReport.studies ? serviceReport.studies : 0)
     }
 
 }

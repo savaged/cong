@@ -29,19 +29,12 @@ class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
 
         mockLogging(MonthServiceReportTotalsService, true)
 
-        def activePublisherCounts = [
-            new ActivePublisherCount(yyyymm:200905, publishers:4)
-        ]
-        mockDomain(ActivePublisherCount, activePublisherCounts)
+	mockDomain(Member)
+	mockDomain(ServiceReport)
+        mockDomain(ActivePublisherCount)
+        mockDomain(ServiceReportTotals)
 
-        def serviceReportTotals = [
-            new ServiceReportTotals(category:Categories.PUBLISHERS, yyyymm:200905, publishers:2, books:1, brochures:2, hours:25, magazines:20, returnVisits:22, studies:2),
-            new ServiceReportTotals(category:Categories.AUXILIARY_PIONEERS, yyyymm:200905, publishers:1, hours:50, magazines:10, returnVisits:28),
-            new ServiceReportTotals(category:Categories.REGULAR_PIONEERS, yyyymm:200905, publishers:1, books:1, hours:75, magazines:40, returnVisits:42, studies:3)
-        ]
-        mockDomain(ServiceReportTotals, serviceReportTotals)
-
-        monthServiceReportTotalsService = new MonthServiceReportTotalsService()
+	monthServiceReportTotalsService = new MonthServiceReportTotalsService()
     }
 
     protected void tearDown() {
@@ -53,8 +46,8 @@ class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
         assertNotNull serviceReportTotals
         assertNotNull serviceReportTotals.rows
         assertNotNull serviceReportTotals.activePubCount
-        assertEquals 4, serviceReportTotals.activePubCount
+        assertEquals 0, serviceReportTotals.activePubCount
         assertNotNull serviceReportTotals.rows[3]
-        assertEquals 150, serviceReportTotals.rows[3].hours
+        assertEquals 0, serviceReportTotals.rows[3].hours
     }
 }

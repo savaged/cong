@@ -22,16 +22,172 @@ import info.savaged.cong.utils.DateUtils
 
 class MonthServiceReportTotalsService {
 
+    boolean transactional = true
+
     ServiceReportTotalsTableDto build(Integer month, Integer year) {
 
 	def yyyymm = DateUtils.convert(year, month)
 
-        log.debug "Building service report totals and active publisher count for ${yyyymm}..."
+        def serviceReportTotals = calc(yyyymm)
+        persist(serviceReportTotals)
+	load(yyyymm)
+    }
+
+    private List calc(Integer yyyymm) {
+
+        log.debug "Calculating month totals for [${yyyymm}]..."
+
+        def serviceReportTotals = [
+            new ServiceReportTotals(category:Categories.PUBLISHERS, yyyymm:yyyymm),
+            new ServiceReportTotals(category:Categories.AUXILIARY_PIONEERS, yyyymm:yyyymm),
+            new ServiceReportTotals(category:Categories.REGULAR_PIONEERS, yyyymm:yyyymm)
+        ]
+
+	def serviceReports = ServiceReport.findAllByYyyymm(yyyymm)
+	def activePublishers = retrieveActivePublishers(yyyymm)
+
+        log.debug( 
+	    "processing [${serviceReports?.size()}] service reports and [${activePublishers?.size()}] active publishers"
+        )
+        for (serviceReport in serviceReports) {
+
+            if (activePublishers.get(serviceReport.publisher.fullname)) {
+
+                def regPioneer = MemberState.findByNameAndMember(
+		    States.REGULAR_PIONEER.toString(), serviceReport.publisher)
+
+                if (regPioneer) {
+                    if (!regPioneer.ending) {
+                        updateRow(serviceReportTotals[2], serviceReport)
+                        log.debug(
+			    "Added service report for ${serviceReport?.publisher} as regular pioneer"
+                        )
+                    }
+                } else {
+                    if (serviceReport.isAuxPioneer) {
+                        updateRow(serviceReportTotals[1], serviceReport)
+                        log.debug(
+			    "Added service report for  ${serviceReport?.publisher} as auxiliary pioneer"
+                        )
+                    } else {
+                        updateRow(serviceReportTotals[0], serviceReport)
+                        log.debug(
+			    "Added service report for ${serviceReport?.publisher} as publisher"
+                        )
+                    }
+                }
+            } else {
+		throw new Exception("No active publisher matched to service report [${serviceReport}]")
+	    }
+        }
+	serviceReportTotals
+    }
+
+    private void updateRow(row, serviceReport) {
+        row.publishers++
+        row.books += (serviceReport.books ? serviceReport.books : 0)
+        row.brochures += (serviceReport.brochures ? serviceReport.brochures : 0)
+        row.hours += serviceReport.hours
+        row.magazines += (serviceReport.magazines ? serviceReport.magazines : 0)
+        row.returnVisits += (serviceReport.returnVisits ? serviceReport.returnVisits : 0)
+        row.studies += (serviceReport.studies ? serviceReport.studies : 0)
+    }
+
+    private Map retrieveActivePublishers(Integer yyyymm) {
+	
+	def activePublishers = [:]
+        
+	def publishers = Member.findAllByIsPublisher(true)
+
+        for (publisher in publishers) {
+            def inactive = MemberState.findByNameAndMember(States.INACTIVE.toString(), publisher)
+            if (inactive) {
+                if (!inactive.ended) {
+                    log.debug(
+			"${publisher} not counted as active publisher due to being in an inactive state"
+                    )
+                    continue
+                }
+            }
+            def disfellowshipped = MemberState.findByNameAndMember(States.DISFELLOWSHIPPED.toString(), publisher)
+            if (disfellowshipped) {
+                if (!disfellowshipped.ended) {
+                    log.debug(
+			"${publisher} not counted as active publisher due to being in a disfellowshipped state"
+                    )
+                    continue
+                }
+            }
+            activePublishers.put(publisher.fullname, publisher)
+            log.debug "${publisher} counted as active publisher"
+        }
+        activePublishers
+    }
+
+    private Integer retrieveActiveBaptizedPublisherCount(Map activePublishers) {
+	
+	def activeBaptizedPublisherCount = 0
+
+        for (publisher in activePublishers.values()) {
+
+	    if (publisher.baptized) { 
+		activeBaptizedPublisherCount++
+		log.debug "${publisher} counted as baptized active publisher"
+	    }
+	}
+	activeBaptizedPublisherCount 
+    }
+
+    private void persist(List serviceReportTotals) {
+
+        log.debug 'Persisting ' + serviceReportTotals.size() + ' service report totals...'
+
+	def yyyymm
+
+        for (totals in serviceReportTotals) {
+
+	    yyyymm = totals?.yyyymm
+
+            if (totals.save(flush:true)) {
+                log.debug(
+		    "Persisting service report totals: [${totals}] with [${totals?.hours}] hours, for [${yyyymm}]"
+                )
+            } else {
+                totals.errors.each {
+                    log.debug "failed to save ${totals} due to: ${it}"
+                }
+            }
+        }
+
+        log.debug 'Persisting active publisher count...'
+
+	def activePublishers = retrieveActivePublishers(yyyymm)
+	def activeBaptizedPublisherCount = retrieveActiveBaptizedPublisherCount(activePublishers)
+
+        def activePublisherCount = new ActivePublisherCount(
+	    yyyymm:yyyymm, 
+	    publishers:activePublishers.size(),
+	    baptizedPublishers:activeBaptizedPublisherCount)
+        
+        if (activePublisherCount.save(flush:true)) {
+            log.debug(
+		"Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.yyyymm}"
+            )
+        } else {
+            activePublisherCount.errors.each {
+                log.debug "failed to save ${activePublisherCount} due to: ${it}"
+            }
+        }
+    }
+
+    private ServiceReportTotalsTableDto load(Integer yyyymm) {
+
+        log.debug "Loading service report totals and active publisher count for year and month [${yyyymm}]..."
 
         def table = new ServiceReportTotalsTableDto()
         def activePublisherCount = ActivePublisherCount.findByYyyymm(yyyymm)
         if (!activePublisherCount) {
-            log.debug "No active publishers count found for ${yyyymm}"
+            log.debug "No active publishers count found for year and month [${yyyymm}]"
         } else {
             table.activePubCount = activePublisherCount.publishers
         }

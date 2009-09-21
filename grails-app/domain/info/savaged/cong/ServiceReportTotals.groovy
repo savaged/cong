@@ -34,8 +34,8 @@ class ServiceReportTotals {
 
     static constraints = {
 	yyyymm(min:190101)
-	hours(min:1)
-	publishers(min:1)
+	hours(min:0)
+	publishers(min:0)
         books(nullable:true)
         brochures(nullable:true)
         magazines(nullable:true)

@@ -66,7 +66,6 @@ class ExcelUploadServiceTests extends GrailsUnitTestCase {
         excelUploadService.bindData file, 5, 2009
 	
         assertEquals(4, excelUploadService.serviceReports.size())
-        assertNotNull excelUploadService.serviceReportTotals
         
         assertEquals(200905, excelUploadService.serviceReports[0].yyyymm)
     }
