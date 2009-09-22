@@ -130,17 +130,7 @@ class PublishersService {
     }
 
     private Integer retrieveActiveBaptizedPublisherCount(Map activePublishers) {
-	
-	def activeBaptizedPublisherCount = 0
-
-        for (publisher in activePublishers.values()) {
-
-	    if (publisher.baptized) { 
-		activeBaptizedPublisherCount++
-		log.debug "${publisher} counted as baptized active publisher"
-	    }
-	}
-	activeBaptizedPublisherCount 
+        activePublishers.values().findAll({it.baptized}).size()
     }
 
     void persistActivePublisherCounts(Integer yyyymm) {

@@ -55,6 +55,6 @@ class ServiceReport {
     }
 
     String toString() {
-        return """${publisher} for ${yyyymm}"""
+        "yyyymm:${yyyymm}, books:${books}, brochures:${brochures}, hours:${hours}, magazines:${magazines}, returnVisits:${returnVisits}, studies:${studies}"
     }
 }
