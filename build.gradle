@@ -1,0 +1,54 @@
+/**
+ * needs: java -jar selenium-server.jar -interactive
+ */
+repositories {
+   mavenCentral()
+   mavenRepo urls: 'http://www.easyb.org/repoa/'
+   mavenRepo urls: 'http://nexus.openqa.org/content/repositories/releases'
+}
+
+usePlugin 'groovy'
+
+configurations {
+   easybtaskdef {
+       transitive = true
+   }
+   easybrunner.extendsFrom easybtaskdef
+}
+
+dependencies {
+   easybtaskdef(
+       'org.easyb:easyb:0.9.6',
+       'commons-cli:commons-cli:1.2',
+       'org.codehaus.groovy:groovy-all:1.6.4'
+   )
+   easybrunner (
+	'org.seleniumhq.selenium.client-drivers:selenium-java-client-driver:1.0.1'
+   )
+}
+
+defaultTasks 'prep', 'run'
+
+def behaviorTestDir = 'test/behavior'
+def easybTxtreport = 'test/reports/easybStories.txt'
+
+task prep << {
+   new File("${easybTxtreport}").delete()
+}
+
+task run << {
+   ant.taskdef(
+       name: 'easyb',
+       classname: 'org.easyb.ant.BehaviorRunnerTask',
+       classpath: configurations.easybtaskdef.asPath
+   )
+   ant.easyb(failureProperty: 'easyb.failed') {
+       classpath {
+           pathelement path: configurations.easybrunner.asPath
+       }
+       behaviors(dir: '.') {
+           include name: "${behaviorTestDir}/**/*Story.groovy"
+       }
+       report location: "${easybTxtreport}", format: 'txtstory'
+   }
+}
