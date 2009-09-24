@@ -18,6 +18,8 @@ along with cong.  If not, see <http://www.gnu.org/licenses/>.
 */
 package info.savaged.cong
 
+import com.thoughtworks.selenium.DefaultSelenium
+
 description 'Member searching user-story and acceptance criteria scenario'
 
 narrative 'User Story', {
@@ -26,22 +28,38 @@ narrative 'User Story', {
     so that 'i can view their record'
 }
 
-scenario 'Acceptance Criteria', {
-    given 'the member is in the database', {
-	// TODO ensure the test data BootStrap is run
-	false
-    }
-    and 'the member search page is selected', {
-	// TODO select the member search GUI
-	false
-    }
-    when 'searched for by firstname and lastname', {
-	// TODO use the GUI search
-	false
-    }
-    then 'the member matching should be returned', {
-	// TODO test for member on GUI
-	false
+before 'start selenium', {
+    given 'selenium is up and running', {
+        selenium = new DefaultSelenium(
+            'localhost',
+            4444,
+            '*chrome',
+            'http://localhost:8080/cong')
+        selenium.start()
     }
 }
 
+scenario 'Acceptance Criteria', {
+    given 'the member is in the database', {
+	selenium.open '/cong/member/list/'
+	selenium.isTextPresent 'David'
+    }
+    and 'the member search page is selected', {
+	selenium.open '/cong/member/search/'
+	selenium.isTextPresent 'Member Search'
+    }
+    when 'searched for by firstname and lastname', {
+	selenium.type 'firstname', 'David'
+	selenium.type 'lastname', 'Savage'
+	selenium.click "//input[@value='Search']"
+    }
+    then 'the member matching should be returned', {
+	selenium.isTextPresent 'David'
+    }
+}
+
+after 'stop selenium', {
+    then 'selenium should be shutdown', {
+        selenium.stop()
+    }
+}
