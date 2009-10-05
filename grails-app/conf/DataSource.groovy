@@ -44,7 +44,7 @@ environments {
 	production {
 		dataSource {
 			dbCreate = "update"
-                        url = "jdbc:hsqldb:file:/Users/davidsavage/savaged.info/cong/reports/cong/db/congDb;shutdown=true"
+                        url = "jdbc:hsqldb:hsql://localhost/congdb"
 		}
 	}
 }
