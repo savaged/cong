@@ -24,6 +24,10 @@ class PublishersService {
 
     boolean transactional = true
 
+    List loadActive() {
+	retrieveActivePublishers()
+    }
+
     List loadInactive(Integer month, Integer year) {
 
 	def from = DateUtils.convert(year, month)
@@ -98,9 +102,9 @@ class PublishersService {
 	inactiveMembers
     }
 
-    private Map retrieveActivePublishers(Integer yyyymm) {
+    private List retrieveActivePublishers() {
 	
-	def activePublishers = [:]
+	def activePublishers = []
         
 	def publishers = Member.findAllByIsPublisher(true)
 
@@ -123,21 +127,21 @@ class PublishersService {
                     continue
                 }
             }
-            activePublishers.put(publisher.fullname, publisher)
+            activePublishers << publisher
             log.debug "${publisher} counted as active publisher"
         }
         activePublishers
     }
 
-    private Integer retrieveActiveBaptizedPublisherCount(Map activePublishers) {
-        activePublishers.values().findAll({it.baptized}).size()
+    private Integer retrieveActiveBaptizedPublisherCount(List activePublishers) {
+        activePublishers.findAll({it.baptized}).size()
     }
 
     void persistActivePublisherCounts(Integer yyyymm) {
 
         log.debug "Persisting active publisher count for [${yyyymm}]..."
 
-	def activePublishers = retrieveActivePublishers(yyyymm)
+	def activePublishers = retrieveActivePublishers()
 	def activeBaptizedPublisherCount = retrieveActiveBaptizedPublisherCount(activePublishers)
 
         def activePublisherCount = new ActivePublisherCount(
@@ -156,4 +160,3 @@ class PublishersService {
         }
     }
 }
-

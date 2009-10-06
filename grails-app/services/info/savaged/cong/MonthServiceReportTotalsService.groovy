@@ -46,14 +46,18 @@ class MonthServiceReportTotalsService {
         ]
 
 	def serviceReports = ServiceReport.findAllByYyyymm(yyyymm)
-	def activePublishers = publishersService.retrieveActivePublishers(yyyymm)
+	def activePublishers = publishersService.retrieveActivePublishers()
 
         log.debug( 
 	    "processing [${serviceReports?.size()}] service reports and [${activePublishers?.size()}] active publishers"
         )
         for (serviceReport in serviceReports) {
 
-            if (activePublishers.get(serviceReport.publisher.fullname)) {
+	    def matching = activePublishers.findAll {
+		it.fullname == serviceReport.publisher.fullname
+	    }
+
+            if (matching && matching[0]) {
 
                 def regPioneer = MemberState.findByNameAndMember(
 		    States.REGULAR_PIONEER.toString(), serviceReport.publisher)
