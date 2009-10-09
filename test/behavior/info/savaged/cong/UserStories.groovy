@@ -21,25 +21,53 @@ package info.savaged.cong
 
 import com.thoughtworks.selenium.DefaultSelenium
 
-// set-up and tear-down
+/*
+description 'a demo acceptance criteria scenario played out with selenium'
+
+before 'start selenium', {
+	given 'selenium is up and running', {
+	    selenium = new DefaultSelenium(
+	        'localhost',
+	        4444,
+	        '*mock',//'*chrome',//'*iexplore',
+	        'http://www.google.co.uk/'
+	    )
+	    selenium.start()
+	}
+}
+scenario 'check browser is up and running', {
+    given 'google can be reached', {
+		selenium.open ''
+		selenium.isTextPresent 'Google'
+    }
+    when 'a search is entered', {
+		selenium.type 'q', 'savaged.info'
+		selenium.click 'btnG'
+    }
+    then 'the results should be returned', {
+    	selenium.isTextPresent 'David Savage'
+    }
+}
+after 'stop selenium', {
+	then 'tests are complete and selenium should be shutdown', {
+	    selenium.stop()
+	}
+}
+*/
+
+description 'Tests For Each User-Story'
+
 before 'start selenium', {
     given 'selenium is up and running', {
         selenium = new DefaultSelenium(
             'localhost',
             4444,
-            '*chrome',
-            'http://localhost:8080/cong')
+            '*mock',//'*chrome',//'*iexplore',
+            'http://localhost:8080/cong/'
+        )
         selenium.start()
     }
 }
-after 'stop selenium', {
-    then 'selenium should be shutdown', {
-        selenium.stop()
-    }
-}
-
-
-description 'user-stories and acceptance criteria scenarios'
 
 narrative 'member search user story', {
     as_a 'congregation secretary'
@@ -49,20 +77,20 @@ narrative 'member search user story', {
 
 scenario 'member search acceptance criteria', {
     given 'the member is in the database', {
-	selenium.open '/cong/member/list/'
-	selenium.isTextPresent 'David'
+		selenium.open '/cong/member/list/'
+		selenium.isTextPresent 'David'
     }
     and 'the member search page is selected', {
-	selenium.open '/cong/member/search/'
-	selenium.isTextPresent 'Member Search'
+		selenium.open '/cong/member/search/'
+		selenium.isTextPresent 'Member Search'
     }
     when 'searched for by firstname and lastname', {
-	selenium.type 'firstname', 'David'
-	selenium.type 'lastname', 'Savage'
-	selenium.click "//input[@value='Search']"
+		selenium.type 'firstname', 'David'
+		selenium.type 'lastname', 'Savage'
+		selenium.click "//input[@value='Search']"
     }
     then 'the member matching should be returned', {
-	selenium.isTextPresent 'David'
+    	selenium.isTextPresent 'Savage, David'
     }
 }
 
@@ -71,7 +99,54 @@ narrative 'member CRUD story', {
     i_want 'to create, read, update and delete a congregation member record'
     so_that 'i can manage congregation member data'
 }
-// TODO add scenario and include unique member constraint
+scenario 'member CRUD acceptance criteria (positive)', {
+	given 'a member is not already in the database', {
+		selenium.open '/cong/member/list/'
+		!selenium.isTextPresent('Neo')
+	}	
+	when 'the member is created', {
+		selenium.open '/cong/member/create'
+		selenium.type 'firstname', 'Neo'
+		selenium.type 'lastname', 'Savage'
+		selenium.select 'groupUnit', 'label=PENFIELDS_HOUSE'
+		selenium.select 'birth_day', 'label=30'
+		selenium.select 'birth_month', 'label=9'
+		selenium.select 'birth_year', 'label=2009'
+		selenium.select 'birth_hour', 'label=00'
+		selenium.select 'birth_minute', 'label=12'
+		selenium.click 'isMale'
+		selenium.click "//input[@value='Create']"
+	}
+	then 'the member should be returned on the Show Member page', {
+		selenium.isTextPresent 'Show Member'
+		selenium.isTextPresent 'created'
+		selenium.isTextPresent 'Savage, Neo'
+	}
+}
+scenario 'member CRUD acceptance criteria (negative)', {
+	given 'a member is already in the database', {
+		selenium.open '/cong/member/list/'
+		selenium.isTextPresent('Neo')
+	}	
+	when 'the member is created', {
+		selenium.open '/cong/member/create'
+		selenium.type 'firstname', 'Neo'
+		selenium.type 'lastname', 'Savage'
+		selenium.select 'groupUnit', 'label=PENFIELDS_HOUSE'
+		selenium.select 'birth_day', 'label=30'
+		selenium.select 'birth_month', 'label=9'
+		selenium.select 'birth_year', 'label=2009'
+		selenium.select 'birth_hour', 'label=00'
+		selenium.select 'birth_minute', 'label=12'
+		selenium.click 'isMale'
+		selenium.click "//input[@value='Create']"
+	}	
+	then 'an error message should be returned on the Create Member page', {
+		selenium.isTextPresent 'Create Member'
+		selenium.isTextPresent 'Property [birth] of class [class info.savaged.cong.Member] with value [01/10/09 12:00] must be unique'
+		selenium.isTextPresent 'Savage, Neo'
+	}
+}
 
 
 narrative 'monthly service report upload story', {
@@ -90,10 +165,10 @@ narrative 'service report download story', {
 // TODO add scenario
 
 
-narrative 'member CRUD story', {
+narrative 'member state CRUD story', {
     as_a 'congregation secretary'
-    i_want 'to create, read, update and delete a congregation member record'
-    so_that 'i can manage congregation member data'
+    i_want 'to create, read, update and delete a congregation member state records'
+    so_that 'i can manage congregation member state data'
 }
 // TODO add scenario and include unique member constraint
 
@@ -120,3 +195,9 @@ narrative 'list inactive publishers story', {
     so_that 'i can manage inactive states and report on it'
 }
 // TODO add scenario
+
+after 'stop selenium', {
+    then 'tests are complete and selenium should be shutdown', {
+        selenium.stop()
+    }
+}
