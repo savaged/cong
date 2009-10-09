@@ -20,7 +20,7 @@ package info.savaged.cong
 
 class MonthServiceReportTotalsController {
 
-    def monthServiceReportTotalsService
+    def totalsService
 
     def index = {
         def cal = Calendar.getInstance()
@@ -33,7 +33,7 @@ class MonthServiceReportTotalsController {
             def year = Integer.parseInt(params.starting_year)
             def month = Integer.parseInt(params.starting_month)
 
-            def serviceReportTotals = monthServiceReportTotalsService.build(month, year)
+            def serviceReportTotals = totalsService.build(month, year)
 
             cal.set(year, month-1, 1)
             flash.starting = cal.getTime()

@@ -20,11 +20,40 @@ package info.savaged.cong
 
 import info.savaged.cong.utils.DateUtils
 
-class MonthServiceReportTotalsService {
+class TotalsService {
 
     def publishersService
 
     boolean transactional = true
+
+    Map build(String lastname, String firstname, Integer serviceYear) {
+	def member = Member.findByLastnameLikeAndFirstnameLike(lastname, firstname)
+	    
+        def serviceYearStart = DateUtils.convert(serviceYear, 9)
+	    
+	    def serviceReports = member?.serviceReports.findAll( {
+		it.yyyymm >= serviceYearStart
+	    } )
+	    
+	    def serviceYearTotals = [
+		publisher:member,
+		books:0,
+		brochures:0,
+		hours:0,
+	        magazines:0,
+	        returnVisits:0,
+	        studies:0
+	    ]
+	    serviceReports.each {
+	    serviceYearTotals.books += (it.books ? it.books : 0)
+	    serviceYearTotals.brochures += (it.brochures ? it.brochures : 0)
+	    serviceYearTotals.hours += it.hours 
+	    serviceYearTotals.magazines += (it.magazines ? it.magazines : 0)
+            serviceYearTotals.returnVisits += (it.returnVisits ? it.returnVisits : 0)
+            serviceYearTotals.studies += (it.studies ? it.studies : 0)
+	}
+	serviceYearTotals
+    }
 
     ServiceReportTotalsTableDto build(Integer month, Integer year) {
 

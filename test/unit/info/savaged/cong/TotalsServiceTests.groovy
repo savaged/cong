@@ -20,14 +20,14 @@ package info.savaged.cong
 
 import grails.test.*
 
-class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
+class TotalsServiceTests extends GrailsUnitTestCase {
     
-    def monthServiceReportTotalsService
+    def totalsService
 
     protected void setUp() {
         super.setUp()
 
-        mockLogging(MonthServiceReportTotalsService, true)
+        mockLogging(TotalsService, true)
         mockLogging(PublishersService, true)
 
 	mockDomain(Member)
@@ -35,8 +35,8 @@ class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
         mockDomain(ActivePublisherCount)
         mockDomain(ServiceReportTotals)
 
-	monthServiceReportTotalsService = new MonthServiceReportTotalsService()
-	monthServiceReportTotalsService.publishersService = new PublishersService()
+	totalsService = new TotalsService()
+	totalsService.publishersService = new PublishersService()
     }
 
     protected void tearDown() {
@@ -44,7 +44,7 @@ class MonthServiceReportTotalsServiceTests extends GrailsUnitTestCase {
     }
 
     void testBuild() {
-        ServiceReportTotalsTableDto serviceReportTotals = monthServiceReportTotalsService.build(5, 2009)
+        ServiceReportTotalsTableDto serviceReportTotals = totalsService.build(5, 2009)
         assertNotNull serviceReportTotals
         assertNotNull serviceReportTotals.rows
         assertNotNull serviceReportTotals.activePubCount

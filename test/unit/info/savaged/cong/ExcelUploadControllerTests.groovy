@@ -37,17 +37,18 @@ class ExcelUploadControllerTests extends ControllerUnitTestCase {
 
     void testUpload() {
         GrailsMockHttpServletRequest.metaClass.getFile = { filename ->
-            // TODO sort out where this test resource should live, maybe with the grails maven plugin support
-            def file = new File('/Users/davidsavage/savaged.info/cong/reports/cong/docs/cbs_report_proforma.xls')
-            def stream = new FileInputStream(file)
-            def multipartFile = new MockMultipartFile('local.xls', 'cbs_report_proforma.xls', 'text/xls', stream)
-            return multipartFile
+	    // TODO sort out where this test resource should live, maybe with the grails maven plugin support
+	    def file = new File('/Users/davidsavage/savaged.info/cong/reports/cong/docs/cbs_report_proforma.xls')
+	    def stream = new FileInputStream(file)
+	    def multipartFile = new MockMultipartFile('local.xls', 'cbs_report_proforma.xls', 'text/xls', stream)
+	    return multipartFile
         }
-        GrailsMock.metaClass.bindData = { file, month, year -> }
-        controller.excelUploadService = mockFor(ExcelUploadService)
-        controller.upload()
-        Calendar cal = Calendar.getInstance()
-        assertEquals cal.get(Calendar.MONTH), controller.month
-        assertEquals cal.get(Calendar.YEAR), controller.year
+	controller.with {    
+            params.starting_year = '2009'
+            params.starting_month = '9'
+	    excelUploadService = mockFor(ExcelUploadService)
+	    excelUploadService.metaClass.bindData = { f, m, y -> }
+            upload()
+	}
     }
 }

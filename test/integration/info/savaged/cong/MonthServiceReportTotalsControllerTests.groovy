@@ -25,7 +25,7 @@ class MonthServiceReportTotalsControllerTests extends ControllerUnitTestCase {
     protected void setUp() {
         super.setUp()
         // BootStrap has all the data loaded already
-        mockLogging(MonthServiceReportTotalsService, true)
+        mockLogging(TotalsService, true)
     }
 
     protected void tearDown() {
@@ -34,8 +34,8 @@ class MonthServiceReportTotalsControllerTests extends ControllerUnitTestCase {
 
     void testIndex() {
         controller.with {
-	    monthServiceReportTotalsService = new MonthServiceReportTotalsService()
-	    monthServiceReportTotalsService.publishersService = new PublishersService()
+	    totalsService = new TotalsService()
+	    totalsService.publishersService = new PublishersService()
             request.method = 'POST'
             params.with {
                 starting_year = '2009'

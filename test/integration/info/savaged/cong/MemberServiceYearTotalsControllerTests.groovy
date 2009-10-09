@@ -21,6 +21,7 @@ package info.savaged.cong
 import grails.test.*
 
 class MemberServiceYearTotalsControllerTests extends ControllerUnitTestCase {
+
     protected void setUp() {
         super.setUp()
     }
@@ -32,6 +33,7 @@ class MemberServiceYearTotalsControllerTests extends ControllerUnitTestCase {
     void testIndex() {
         
         controller.with {
+	    totalsService = new TotalsService()
             request.method = 'POST'
             params.with {
                 lastname = 'Savage'
