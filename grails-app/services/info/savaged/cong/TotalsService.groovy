@@ -75,7 +75,7 @@ class TotalsService {
         ]
 
 	def serviceReports = ServiceReport.findAllByYyyymm(yyyymm)
-	def activePublishers = publishersService.retrieveActivePublishers()
+	def activePublishers = publishersService.loadActive() 
 
         log.debug( 
 	    "processing [${serviceReports?.size()}] service reports and [${activePublishers?.size()}] active publishers"
@@ -88,16 +88,11 @@ class TotalsService {
 
             if (matching && matching[0]) {
 
-                def regPioneer = MemberState.findByNameAndMember(
-		    States.REGULAR_PIONEER.toString(), serviceReport.publisher)
-
-                if (regPioneer) {
-                    if (!regPioneer.ending) {
-                        updateRow(serviceReportTotals[2], serviceReport)
-                        log.debug(
-			    "Added service report for ${serviceReport?.publisher} as regular pioneer"
-                        )
-                    }
+                if (serviceReport.publisher.isRegularPioneer) {
+		    updateRow(serviceReportTotals[2], serviceReport)
+		    log.debug(
+			"Added service report for ${serviceReport?.publisher} as regular pioneer"
+		    )
                 } else {
                     if (serviceReport.isAuxPioneer) {
                         updateRow(serviceReportTotals[1], serviceReport)

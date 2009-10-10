@@ -45,4 +45,8 @@ class MemberController {
 	}
     }
 
+    def temp = {
+	render 'place for member upload'
+    }
+
 }

@@ -28,10 +28,6 @@
                    	        <g:sortableColumn property="firstname" title="Firstname" />
                         
                    	        <th>Group Unit</th>
-                   	    
-                   	        <th>Bible Study Conductor</th>
-                   	    
-                   	        <g:sortableColumn property="pioneerSchoolDate" title="Pioneer School Date" />
                         
                         </tr>
                     </thead>
@@ -46,10 +42,6 @@
                             <td>${fieldValue(bean:memberInstance, field:'firstname')}</td>
                         
                             <td>${fieldValue(bean:memberInstance, field:'groupUnit')}</td>
-                        
-                            <td>${fieldValue(bean:memberInstance, field:'bibleStudyConductor')}</td>
-                        
-                            <td>${fieldValue(bean:memberInstance, field:'pioneerSchoolDate')}</td>
                         
                         </tr>
                     </g:each>

@@ -4,10 +4,27 @@
   <meta name="layout" content="main" />
 </head>
 <body>
-<h1 style="margin-left:20px;">Home</h1>
-<h2 style="margin-left:20px;width:80%">
+<h1 style="margin-left:20px;">
 Cong (AKA Groovy-Cong), is designed as lean tooling for a JW congregation secretary.
-</h2>
+</h1>
+
+<p>&nbsp;
+</p>
+<p style="margin-left:20px;width:80%">
+  Below is a list of controllers that are currently deployed in this application,
+click on each to execute its default action:</p>
+<p>&nbsp;</p>
+<div class="dialog" style="margin-left:20px;width:60%;">
+<ul>
+<g:each var="c" in="${grailsApplication.controllerClasses}">
+  <li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
+</g:each>
+<li class="controller"><g:link controller="member" action="search">info.savaged.cong.MemberController.search</g:link></br></li>
+<li class="controller"><g:link controller="member" action="inactive">info.savaged.cong.MemberController.inactive</g:link></br></li>
+</ul>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p style="margin-left:20px;width:80%">
 Copyright (C) 2009 David Savage.
 <br/>
@@ -38,20 +55,5 @@ You should have received a copy of the GNU General Public License
 along with this program.  
 If not, see <a href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.
 </p>
-<p>&nbsp;
-</p>
-<p style="margin-left:20px;width:80%">
-  Below is a list of controllers that are currently deployed in this application,
-click on each to execute its default action:</p>
-<p>&nbsp;</p>
-<div class="dialog" style="margin-left:20px;width:60%;">
-<ul>
-<g:each var="c" in="${grailsApplication.controllerClasses}">
-  <li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-</g:each>
-<li class="controller"><g:link controller="member" action="search">info.savaged.cong.MemberController.search</g:link></br></li>
-<li class="controller"><g:link controller="member" action="inactive">info.savaged.cong.MemberController.inactive</g:link></br></li>
-</ul>
-</div>
 </body>
 </html>

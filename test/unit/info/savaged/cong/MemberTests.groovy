@@ -56,15 +56,9 @@ class MemberTests extends GrailsUnitTestCase {
         assertEquals 'firstname is blank', 'blank', member.errors.firstname
         assertEquals 'lastname is blank', 'blank', member.errors.lastname
         assertEquals 'birth is null', 'nullable', member.errors.birth
-        assertEquals 'immersion is null', 'nullable', member.errors.immersion
-
-        assertNull 'isPublisher should not have an error', member.errors.isPublisher
-        assertNull 'isMale should not have an error', member.errors.isMale
 
         assertNull 'groupUnit should not have an error', member.errors.groupUnit
-
-        assertNull 'bibleStudyConductor should not have an error', member.errors.bibleStudyConductor
-        assertNull 'pioneerSchoolDate should not have an error', member.errors.pioneerSchoolDate
+        assertNull 'immersion should not have an error', member.errors.immersion
 
         def dob = Calendar.instance
 	dob.set 1968, 9, 30
@@ -74,7 +68,37 @@ class MemberTests extends GrailsUnitTestCase {
 	    lastname:'Savage',
 	    firstname:'David',
 	    birth:dob.time,
-	    immersion:bap.time
+	    immersion:bap.time,
+	    isElder:true,
+	    isMale:true,
+	    isPublisher:true,
+	    isInactive:true
+	)
+	assertFalse 'validation should have failed', anotherMember.validate()
+
+	anotherMember = new Member(
+	    lastname:'Savage',
+	    firstname:'David',
+	    birth:dob.time,
+	    immersion:bap.time,
+	    isElder:true,
+	    isMale:true,
+	    isPublisher:true
+	)
+	anotherMember.validate()
+	println anotherMember.errors
+	assertTrue 'validation should not have failed', anotherMember.validate()
+
+	anotherMember = new Member(
+	    lastname:'Savage',
+	    firstname:'David',
+	    birth:dob.time,
+	    immersion:bap.time,
+	    isElder:true,
+	    isMale:true,
+	    isPublisher:true,
+	    isInactive:true,
+	    inactiveStarting:Calendar.instance.time
 	)
 	assertTrue 'validation should not have failed', anotherMember.validate()
 	anotherMember.save()
@@ -83,7 +107,13 @@ class MemberTests extends GrailsUnitTestCase {
 	    lastname:'Savage', 
 	    firstname:'David', 
 	    birth:dob.time, 
-	    immersion:bap.time)
+	    immersion:bap.time,
+	    isElder:true,
+	    isMale:true,
+	    isPublisher:true,
+	    isInactive:true,
+	    inactiveStarting:Calendar.instance.time
+	)
         assertFalse 'validation should have failed', dupe.validate()
         assertEquals 'birth, lastname & firstname not unique', 'unique', dupe.errors.birth
     }
@@ -94,19 +124,4 @@ class MemberTests extends GrailsUnitTestCase {
         member.firstname = 'David'
         assertEquals 'Savage, David', member.fullname
     }
-
-    void testGetEnded() {
-        def memberState = new MemberState()
-        assertFalse memberState.ended
- 
-        def cal = Calendar.instance
-        cal.clear()
-        memberState.ending = cal.time
-        assertFalse memberState.ended
- 
-        cal.set 2009,8,1
-        memberState.ending = cal.time
-        assertTrue memberState.ended
-    }
-    
 }

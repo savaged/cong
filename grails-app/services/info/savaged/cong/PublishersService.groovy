@@ -25,7 +25,9 @@ class PublishersService {
     boolean transactional = true
 
     List loadActive() {
-	retrieveActivePublishers()
+	def publishers = Member.findAllByIsPublisher(true)
+	def activePublishers = publishers.findAll { !it.isInactive }
+	activePublishers
     }
 
     List loadInactive(Integer month, Integer year) {
@@ -41,38 +43,25 @@ class PublishersService {
 	
 	publishers.each { publisher ->
 
-	    log.debug "checking for inactive state(s) for [${publisher}]"
+	    log.debug "checking for inactive state for [${publisher}]"
 
 	    def isLongTermInactive = false
-	    publisher?.states.each {
 
-		log.debug "checking [${it}] state for inactive type"
-		
-		if (it.name == States.INACTIVE) {
+	    if (publisher.isInactive) {
 
-		    log.debug "checking if inactive state has not ended"
+		log.debug "[${publisher}] is flagged inactive, now checking if the open inactive state started more than a year ago"
 
-		    if (!it.ended) {
-			def cal = Calendar.instance
-			cal.setTime it.starting
-		    
-			log.debug "checking if the open inactive state started more than a year ago"
-
-			def starting = DateUtils.convert(
-			    cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
-			if (starting < fromLessOneYear) {
-
-			    log.debug "the open inactive state started more than a year ago, and is therefore flagged long term inactive"
-
-			    isLongTermInactive = true
-			}
-		    }
+		def cal = Calendar.instance
+		cal.setTime publisher.inactiveStarting
+		def starting = DateUtils.convert(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
+		if (starting < fromLessOneYear) {
+		    log.debug "the open inactive state started more than a year ago, and is therefore flagged long term inactive"
+		    isLongTermInactive = true
 		}
 	    }
 	    if (!isLongTermInactive) {
 			    
 		log.debug "the member is not long term inactive, therefore is added for further checking"
-		    
 		publishersNotIncludingLongTermInactive << publisher
 	    }
 	}
@@ -102,37 +91,6 @@ class PublishersService {
 	inactiveMembers
     }
 
-    private List retrieveActivePublishers() {
-	
-	def activePublishers = []
-        
-	def publishers = Member.findAllByIsPublisher(true)
-
-        for (publisher in publishers) {
-            def inactive = MemberState.findByNameAndMember(States.INACTIVE.toString(), publisher)
-            if (inactive) {
-                if (!inactive.ended) {
-                    log.debug(
-			"${publisher} not counted as active publisher due to being in an inactive state"
-                    )
-                    continue
-                }
-            }
-            def disfellowshipped = MemberState.findByNameAndMember(States.DISFELLOWSHIPPED.toString(), publisher)
-            if (disfellowshipped) {
-                if (!disfellowshipped.ended) {
-                    log.debug(
-			"${publisher} not counted as active publisher due to being in a disfellowshipped state"
-                    )
-                    continue
-                }
-            }
-            activePublishers << publisher
-            log.debug "${publisher} counted as active publisher"
-        }
-        activePublishers
-    }
-
     private Integer retrieveActiveBaptizedPublisherCount(List activePublishers) {
         activePublishers.findAll({it.baptized}).size()
     }
@@ -141,14 +99,20 @@ class PublishersService {
 
         log.debug "Persisting active publisher count for [${yyyymm}]..."
 
-	def activePublishers = retrieveActivePublishers()
+	def activePublishers = loadActive()
 	def activeBaptizedPublisherCount = retrieveActiveBaptizedPublisherCount(activePublishers)
 
-        def activePublisherCount = new ActivePublisherCount(
-	    yyyymm:yyyymm, 
-	    publishers:activePublishers.size(),
-	    baptizedPublishers:activeBaptizedPublisherCount)
-        
+        def activePublisherCount
+	activePublisherCount = ActivePublisherCount.findByYyyymm(yyyymm)
+	if (activePublisherCount) {
+	    activePublisherCount.publishers = activePublishers.size()
+	    activePublisherCount.baptizedPublishers = activeBaptizedPublisherCount
+	} else {
+	    activePublisherCount = new ActivePublisherCount(
+		yyyymm:yyyymm, 
+		publishers:activePublishers.size(),
+		baptizedPublishers:activeBaptizedPublisherCount)
+        }
         if (activePublisherCount.save(flush:true)) {
             log.debug(
 		"Persisting active publisher total of ${activePublisherCount.publishers} for ${activePublisherCount.yyyymm}"

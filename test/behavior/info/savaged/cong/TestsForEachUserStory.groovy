@@ -181,14 +181,6 @@ narrative 'monthly service report submission story', {
 // TODO add scenario
 
 
-narrative 'meeting attendance CRUD story', {
-    as_a 'congregation secretary'
-    i_want 'to store monthly meeting attendances'
-    so_that 'i can produce reports covering many months'
-}
-// TODO add scenario and include unique constraint
-
-
 narrative 'list inactive publishers story', {
     as_a 'congregation secretary'
     i_want 'want inactive publishers to be viewable as a set'

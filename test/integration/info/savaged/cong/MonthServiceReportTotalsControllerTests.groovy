@@ -49,7 +49,7 @@ class MonthServiceReportTotalsControllerTests extends ControllerUnitTestCase {
         assertEquals Categories.AUXILIARY_PIONEERS, renderArgs.model.serviceReportTotals.rows[1].category
         assertEquals Categories.REGULAR_PIONEERS, renderArgs.model.serviceReportTotals.rows[2].category
         assertEquals 104, renderArgs.model.serviceReportTotals.rows[3].hours
-        assertEquals 4, renderArgs.model.serviceReportTotals.activePubCount 
+        assertEquals 7, renderArgs.model.serviceReportTotals.activePubCount 
     }
 
     void testShow() {

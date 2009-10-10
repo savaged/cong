@@ -35,30 +35,42 @@ class Member {
     Date birth
     Boolean isMale
     Groups groupUnit
-    Member bibleStudyConductor
     Date immersion
     Boolean isPublisher
-    Date pioneerSchoolDate
+    Boolean isElder
+    Boolean isServant
+    Boolean isRegularPioneer
+    Boolean isInactive
+    Date inactiveStarting
 
-    static hasMany = [states:MemberState, serviceReports:ServiceReport]
+    static hasMany = [serviceReports:ServiceReport]
     
     static transients = ['fullname', 'baptized']
-
-    Member() {
-        isMale = isPublisher = false
-    }
 
     static constraints = {
         lastname(blank:false)
         firstname(blank:false)
+        birth(unique:['lastname', 'firstname'])
+        isMale(nullable:false)
         groupUnit(nullable:true)
-        bibleStudyConductor(nullable:true)
-        pioneerSchoolDate(nullable:true)
-	birth(unique:['lastname', 'firstname'])
+        immersion(nullable:true)
+        isPublisher(nullable:false)
+        isElder(nullable:false)
+        isServant(nullable:false)
+        isRegularPioneer(nullable:false)
+        isInactive(nullable:false)
+        inactiveStarting(nullable:true)
+        
+	isInactive(validator: { val, obj ->
+	    def inactiveFlagSet = (val == true)
+	    def inactiveStartingNotNull = (obj?.inactiveStarting != null)
+	    def validCombination = (inactiveFlagSet == false || (inactiveFlagSet && inactiveStartingNotNull)) 
+	    validCombination
+	})
     }
 
-    void setBibleStudyConductor(Member bibleStudyConductor) {
-        this.bibleStudyConductor = bibleStudyConductor
+    Member() {
+	isMale = isPublisher = isElder = isServant = isInactive = isRegularPioneer = false
     }
 
     String getFullname() {
@@ -81,3 +93,4 @@ class Member {
         return fullname
     }
 }
+
