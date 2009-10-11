@@ -18,6 +18,8 @@ along with cong.  If not, see <http://www.gnu.org/licenses/>.
 */
 package info.savaged.cong
 
+import java.text.SimpleDateFormat
+
 class MemberController {
 
     def publishersService
@@ -26,27 +28,24 @@ class MemberController {
 
     def search = {
         if (request.method == 'POST') {
-            log.debug "Searching using lastname:${params?.lastname} & firstname:${params?.firstname}"
-            def member = Member.findByLastnameLikeAndFirstnameLike(params?.lastname, params?.firstname)
-            redirect(uri:"/member/show/${member?.id}")
+  log.debug "Searching using lastname:${params?.lastname} & firstname:${params?.firstname}"
+  def member = Member.findByLastnameLikeAndFirstnameLike(params?.lastname, params?.firstname)
+  redirect(uri:"/member/show/${member?.id}")
         }
     }
 
     def inactive = {
         if (request.method == 'POST') {
-            def year = Integer.parseInt(params.starting_year)
-            def month = Integer.parseInt(params.starting_month)
-           
-	    def inactiveMembers = publishersService.loadInactive(month, year)
+        def year = Integer.parseInt(params.starting_year)
+        def month = Integer.parseInt(params.starting_month)
+ 
+        def inactiveMembers = publishersService.loadInactive(month, year)
 
-	    render view:'list', model:[
-	        memberInstanceList:inactiveMembers, 
-		memberInstanceTotal:inactiveMembers.size()]
-	}
-    }
-
-    def temp = {
-	render 'place for member upload'
+        render view:'list', model:[
+            memberInstanceList:inactiveMembers, 
+            memberInstanceTotal:inactiveMembers.size()]
+        }
     }
 
 }
+

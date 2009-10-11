@@ -20,7 +20,5 @@ package info.savaged.cong
 
 class ServiceReportTotalsController {
 
-    def monthServiceReportTotalsService 
-
     def scaffold = ServiceReportTotals
 }

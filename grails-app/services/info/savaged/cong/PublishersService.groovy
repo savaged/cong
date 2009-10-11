@@ -68,6 +68,12 @@ class PublishersService {
 	log.debug "filtered out long term inactive from the list of publishers, leaving [${publishersNotIncludingLongTermInactive.size()}]"
 
 	def inactiveMembers = []
+
+	if (ServiceReport.findAll()) {
+	    log.debug 'this is a new and empty database therefore returning nothing'
+	    inactiveMembers
+	}
+
 	def previousMonthsRange = DateUtils.previousMonthsRange(6, from)
 
 	log.debug "counting any not reporting in the previous six months since [${from}], from the list of publishers"
