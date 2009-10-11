@@ -24,30 +24,27 @@ class ExcelDownloadController {
     def publishersService
 
     def index = {
-	redirect action:list
+        redirect action:list
     }
 
     def list = {
-/*
-        def data = [
-	    [publisher:'David Savage', books:0, brochures:0, hours:20, magazines:4, returnVisits:10, studies:2, comments:'testing'],
-	    [publisher:'Gaile Savage', books:0, brochures:0, hours:10, magazines:3, returnVisits:5, studies:0, comments:'testing']
-	]
-*/
+
+        // TODO move this to the ExcelUploadService and rename that to ExcelService
+
         def data = publishersService.loadActive()
 
-	def fields = [
-	    'groupUnit',
-	    'fullname',
-	    'books',
-	    'brochures',
-	    'hours',
-	    'magazines',
-	    'return_visits',
-	    'studies',
-	    'comments'
-	] 
-	exportService.export 'excel', response, 'cbs_report_proforma', 'xls', data, fields, [:], [:], [:]
+        def fields = [
+            'groupUnit',
+            'fullname',
+            'books',
+            'brochures',
+            'hours',
+            'magazines',
+            'return_visits',
+            'studies',
+            'comments'
+        ] 
+        exportService.export 'excel', response, 'cbs_report_proforma', 'xls', data, fields, [:], [:], [:]
     }
 }
 
