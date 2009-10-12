@@ -29,7 +29,7 @@ before 'start selenium', {
         selenium = new DefaultSelenium(
             'localhost',
             4444,
-            '*iexplore',// '*firefox',
+            '*firefox',
             'http://localhost:8080/cong/'
         )
         selenium.start()
