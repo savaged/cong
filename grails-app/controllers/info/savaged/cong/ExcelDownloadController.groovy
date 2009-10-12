@@ -29,8 +29,6 @@ class ExcelDownloadController {
 
     def list = {
 
-        // TODO move this to the ExcelUploadService and rename that to ExcelService
-
         def data = publishersService.loadActive()
 
         def fields = [

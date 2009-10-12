@@ -23,11 +23,6 @@ class MonthServiceReportTotalsController {
     def totalsService
 
     def index = {
-        def cal = Calendar.getInstance()
-        if (!flash.starting) {
-            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) - 1)
-            flash.starting = cal.getTime()
-        }
             
         if (request.method == 'POST') {
             def year = Integer.parseInt(params.starting_year)
@@ -35,9 +30,6 @@ class MonthServiceReportTotalsController {
 
             def serviceReportTotals = totalsService.build(month, year)
 
-            cal.set(year, month-1, 1)
-            flash.starting = cal.getTime()
-            
             render view:'show', model:[serviceReportTotals:serviceReportTotals]
         }
     }

@@ -28,9 +28,15 @@ class MemberController {
 
     def search = {
         if (request.method == 'POST') {
-  log.debug "Searching using lastname:${params?.lastname} & firstname:${params?.firstname}"
-  def member = Member.findByLastnameLikeAndFirstnameLike(params?.lastname, params?.firstname)
-  redirect(uri:"/member/show/${member?.id}")
+            def member = Member.findByLastnameLikeAndFirstnameLike(
+                params?.lastname, 
+                params?.firstname)
+            if (member) {
+                redirect(uri:"/member/show/${member?.id}")
+            } else {
+                flash.message = 'info.savaged.cong.member.search.fail'
+                flash.args = [params?.lastname, params?.firstname]
+            }
         }
     }
 

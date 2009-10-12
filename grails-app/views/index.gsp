@@ -5,14 +5,14 @@
 </head>
 <body>
 <h1 style="margin-left:20px;">
-Cong (AKA Groovy-Cong), is designed as lean tooling for a JW congregation secretary.
+  <g:message code='info.savaged.cong.description' default='Cong (AKA Groovy-Cong), is designed as lean tooling for a JW congregation secretary.'/>
 </h1>
 
 <p>&nbsp;
 </p>
 <p style="margin-left:20px;width:80%">
-  Below is a list of controllers that are currently deployed in this application,
-click on each to execute its default action:</p>
+  <g:message code='info.savaged.cong.instruction' default='Below is a list of controllers that are currently deployed in this application, click on each to execute its default action:'/>
+</p>
 <p>&nbsp;</p>
 <div class="dialog" style="margin-left:20px;width:60%;">
 <ul>

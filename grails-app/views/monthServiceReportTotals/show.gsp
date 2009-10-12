@@ -12,8 +12,7 @@
     </div>
     <p>&nbsp;</p>
     <h3 style="margin-left:20px;">
-      Service report totals for
-      <g:formatDate format="yyyy-MM" date="${flash.starting}" />
+      Service report totals for ${params?.starting_year}-${params?.starting_month}
     </h3>
     <p>&nbsp;</p>
     <table>

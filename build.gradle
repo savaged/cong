@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with cong.  If not, see <http://www.gnu.org/licenses/>.
  
  needs: java -jar selenium-server.jar -interactive
+ and: a running cong (grails run-app)
 
 */
 repositories {
@@ -52,7 +53,12 @@ def behaviorTestDir = 'test/behavior'
 def easybTxtreport = 'test/reports/easybStories.txt'
 
 task prep << {
-   new File("${easybTxtreport}").delete()
+    def reportDir = new File('test/reports')
+    reportDir.mkdir()
+    def report = new File("${easybTxtreport}")
+    if (report.exists()) {
+        report.delete()
+    }
 }
 
 task run << {

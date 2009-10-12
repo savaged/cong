@@ -12,7 +12,8 @@
     </div>
     <p>&nbsp;</p>
     <p style="margin-left:20px;width:80%">
-    Please enter the start date for the month of service reports to total.</p>
+        <g:message code='info.savaged.cong.monthservicereporttotals.instructions' default='Please enter the start date for the month of service reports to total.'/>
+    </p>
     <p>&nbsp;</p>
     <div style="margin-left:20px;width:60%;">
       <g:form action="index" >
