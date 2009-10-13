@@ -24,8 +24,8 @@ class DateUtils {
        Integer y = 1901
        Integer m = 1
        if (yyyymm != null && yyyymm > 190101) {
-	   y = Math.round(yyyymm / 100)
-	   m = yyyymm - (y * 100)
+           y = Math.round(yyyymm / 100)
+           m = yyyymm - (y * 100)
        }
        ['year':y, 'month':m]
    }
@@ -33,14 +33,22 @@ class DateUtils {
    static Integer convert(Integer year, Integer month) {
        Integer yyyymm = 190101
        if (year != null && month != null) {
-	   if (month < 1) {
-	       month = 12
-	       year = year - 1
-	   }
-	   yyyymm = (year * 100) + month
+           if (month < 1) {
+               month = 12
+               year = year - 1
+           }
+           yyyymm = (year * 100) + month
        }
        yyyymm
    }
+
+    static Boolean isCurrentServiceReportMonth(Integer yyyymm) {
+        def cal = convertToCalendar(yyyymm)
+        def monthRequested = cal.get(Calendar.MONTH)
+        cal = Calendar.instance
+        def currentMonth = cal.get(Calendar.MONTH)
+        currentMonth - monthRequested == 1
+    }
 
    private static Calendar convertToCalendar(Integer yyyymm) {
        def map = convert(yyyymm)
@@ -57,13 +65,13 @@ class DateUtils {
        def range = []
        def cal = convertToCalendar(yyyymm)
        (0..size-1).each {
-	   def c = { offset ->
-	       cal.add Calendar.MONTH, - offset
-	       yyyymm = convertToYyyymm(cal)
-	       cal.add Calendar.MONTH, offset
-	       yyyymm
-	   }
-	   range << c(it)
+           def c = { offset ->
+               cal.add Calendar.MONTH, - offset
+               yyyymm = convertToYyyymm(cal)
+               cal.add Calendar.MONTH, offset
+               yyyymm
+           }
+           range << c(it)
        }
        range
    }

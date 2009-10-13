@@ -47,4 +47,12 @@ class DateUtilsTests extends GrailsUnitTestCase {
        assertEquals 200809, range[5]
    }
 
+    void testIsCurrentServiceReportMonth() {
+        def cal = Calendar.instance
+        def yyyymm = DateUtils.convert(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
+        assertTrue DateUtils.isCurrentServiceReportMonth(yyyymm)
+        cal.add Calendar.MONTH, -1
+        yyyymm = DateUtils.convert(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
+        assertFalse DateUtils.isCurrentServiceReportMonth(yyyymm)
+    }
 }

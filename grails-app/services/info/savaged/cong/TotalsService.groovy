@@ -27,41 +27,43 @@ class TotalsService {
     boolean transactional = true
 
     Map build(String lastname, String firstname, Integer serviceYear) {
-	def member = Member.findByLastnameLikeAndFirstnameLike(lastname, firstname)
-	    
+        def member = Member.findByLastnameLikeAndFirstnameLike(lastname, firstname)
+            
         def serviceYearStart = DateUtils.convert(serviceYear, 9)
-	    
-	    def serviceReports = member?.serviceReports.findAll( {
-		it.yyyymm >= serviceYearStart
-	    } )
-	    
-	    def serviceYearTotals = [
-		publisher:member,
-		books:0,
-		brochures:0,
-		hours:0,
-	        magazines:0,
-	        returnVisits:0,
-	        studies:0
-	    ]
-	    serviceReports.each {
-	    serviceYearTotals.books += (it.books ? it.books : 0)
-	    serviceYearTotals.brochures += (it.brochures ? it.brochures : 0)
-	    serviceYearTotals.hours += it.hours 
-	    serviceYearTotals.magazines += (it.magazines ? it.magazines : 0)
+            
+        def serviceReports = member?.serviceReports.findAll( {
+            it.yyyymm >= serviceYearStart
+        } )
+        
+        def serviceYearTotals = [
+            publisher:member,
+            books:0,
+            brochures:0,
+            hours:0,
+            magazines:0,
+            returnVisits:0,
+            studies:0
+        ]
+        serviceReports.each {
+            serviceYearTotals.books += (it.books ? it.books : 0)
+            serviceYearTotals.brochures += (it.brochures ? it.brochures : 0)
+            serviceYearTotals.hours += it.hours 
+            serviceYearTotals.magazines += (it.magazines ? it.magazines : 0)
             serviceYearTotals.returnVisits += (it.returnVisits ? it.returnVisits : 0)
             serviceYearTotals.studies += (it.studies ? it.studies : 0)
-	}
-	serviceYearTotals
+        }
+        serviceYearTotals
     }
 
     ServiceReportTotalsTableDto build(Integer month, Integer year) {
 
-	def yyyymm = DateUtils.convert(year, month)
+        def yyyymm = DateUtils.convert(year, month)
 
-        def serviceReportTotals = calc(yyyymm)
-        persist(serviceReportTotals)
-	load(yyyymm)
+        if (DateUtils.isCurrentServiceReportMonth(yyyymm)) {
+            def serviceReportTotals = calc(yyyymm)
+            persist(serviceReportTotals)
+        }
+        load(yyyymm)
     }
 
     private List calc(Integer yyyymm) {
@@ -74,43 +76,43 @@ class TotalsService {
             new ServiceReportTotals(category:Categories.REGULAR_PIONEERS, yyyymm:yyyymm)
         ]
 
-	def serviceReports = ServiceReport.findAllByYyyymm(yyyymm)
-	def activePublishers = publishersService.loadActive() 
+        def serviceReports = ServiceReport.findAllByYyyymm(yyyymm)
+        def activePublishers = publishersService.loadActive() 
 
         log.debug( 
-	    "processing [${serviceReports?.size()}] service reports and [${activePublishers?.size()}] active publishers"
+            "processing [${serviceReports?.size()}] service reports and [${activePublishers?.size()}] active publishers"
         )
         for (serviceReport in serviceReports) {
 
-	    def matching = activePublishers.findAll {
-		it.fullname == serviceReport.publisher.fullname
-	    }
+            def matching = activePublishers.findAll {
+                it.fullname == serviceReport.publisher.fullname
+            }
 
             if (matching && matching[0]) {
 
                 if (serviceReport.publisher.isRegularPioneer) {
-		    updateRow(serviceReportTotals[2], serviceReport)
-		    log.debug(
-			"Added service report for ${serviceReport?.publisher} as regular pioneer"
-		    )
+                    updateRow(serviceReportTotals[2], serviceReport)
+                    log.debug(
+                        "Added service report for ${serviceReport?.publisher} as regular pioneer"
+                    )
                 } else {
                     if (serviceReport.isAuxPioneer) {
                         updateRow(serviceReportTotals[1], serviceReport)
                         log.debug(
-			    "Added service report for  ${serviceReport?.publisher} as auxiliary pioneer"
+                            "Added service report for  ${serviceReport?.publisher} as auxiliary pioneer"
                         )
                     } else {
                         updateRow(serviceReportTotals[0], serviceReport)
                         log.debug(
-			    "Added service report for ${serviceReport?.publisher} as publisher"
+                            "Added service report for ${serviceReport?.publisher} as publisher"
                         )
                     }
                 }
             } else {
-		throw new Exception("No active publisher matched to service report [${serviceReport}]")
-	    }
+                throw new Exception("No active publisher matched to service report [${serviceReport}]")
+            }
         }
-	serviceReportTotals
+        serviceReportTotals
     }
 
     private void updateRow(row, serviceReport) {
@@ -127,15 +129,15 @@ class TotalsService {
 
         log.debug "Persisting [${serviceReportTotals.size()}] service report totals..."
 
-	def yyyymm
+        def yyyymm
 
         for (totals in serviceReportTotals) {
 
-	    yyyymm = totals?.yyyymm
+            yyyymm = totals?.yyyymm
 
             if (totals.save(flush:true)) {
                 log.debug(
-		    "Persisting service report totals: [${totals}] with [${totals?.hours}] hours, for [${yyyymm}]"
+                    "Persisting service report totals: [${totals}] with [${totals?.hours}] hours, for [${yyyymm}]"
                 )
             } else {
                 totals.errors.each {

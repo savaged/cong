@@ -29,7 +29,7 @@ before 'start selenium', {
         selenium = new DefaultSelenium(
             'localhost',
             4444,
-            '*firefox',
+            '*firefox',//'*iexplore',
             'http://localhost:8080/cong/'
         )
         selenium.start()
@@ -181,12 +181,12 @@ scenario 'monthly service report submission acceptance criteria', {
         selenium.open '/cong/monthServiceReportTotals'
     }
     when 'a report month is selected', {
-        selenium.select 'starting_month', 'label=September'
+        selenium.select 'starting_month', 'label=July'
         selenium.select 'starting_year', 'label=2009'
         selenium.click "//input[@value='Submit']"
     }
     then 'the month service report totals page should be presented', {
-        selenium.isTextPresent 'Service report totals for 2009-9'
+        selenium.isTextPresent 'Service report totals for 2009-7'
     }
     and 'the month totals should be correct', {
         def totalCount = selenium.getText("//table/tbody/tr[5]/td[2]")
@@ -228,8 +228,34 @@ scenario 'list inactive publishers acceptance criteria', {
 }
 
 
+narrative 'member service year totals story', {
+    as_a 'congregation secretary'
+    i_want 'i want a report with a publisher service year totals'
+    so_that 'i can track the year service record there'
+}
+scenario 'member service year totals acceptance criteria', {
+    given 'the member service year totals page is selected', {
+        selenium.open '/cong/memberServiceYearTotals'
+    }
+    when 'a member is searched for by firstname and lastname, and the year selected', {
+        selenium.type 'firstname', 'David'
+        selenium.type 'lastname', 'Savage'
+        selenium.select 'serviceYear_year', 'label=2008'
+        selenium.click "//input[@value='Search']"
+    }
+    then 'the member service totals page should be presented', {
+        selenium.isTextPresent 'Current service year report totals for Savage, David'
+    }
+    and 'the member service year totals should be correct', {
+        def totalHours = selenium.getText("//table/tbody/tr[2]/td[3]")
+        totalHours == '27'
+    }
+}
+
+
 after 'stop selenium', {
     then 'tests are complete and selenium should be shutdown', {
         selenium.stop()
     }
 }
+

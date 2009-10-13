@@ -39,7 +39,7 @@ class MonthServiceReportTotalsControllerTests extends ControllerUnitTestCase {
             request.method = 'POST'
             params.with {
                 starting_year = '2009'
-                starting_month = '7'
+                starting_month = '3'
             }
             index()
         }
@@ -48,8 +48,8 @@ class MonthServiceReportTotalsControllerTests extends ControllerUnitTestCase {
         assertEquals Categories.PUBLISHERS, renderArgs.model.serviceReportTotals.rows[0].category
         assertEquals Categories.AUXILIARY_PIONEERS, renderArgs.model.serviceReportTotals.rows[1].category
         assertEquals Categories.REGULAR_PIONEERS, renderArgs.model.serviceReportTotals.rows[2].category
-        assertEquals 104, renderArgs.model.serviceReportTotals.rows[3].hours
-        assertEquals 7, renderArgs.model.serviceReportTotals.activePubCount 
+        assertEquals 161, renderArgs.model.serviceReportTotals.rows[3].hours
+        assertEquals 6, renderArgs.model.serviceReportTotals.activePubCount 
     }
 
     void testShow() {
