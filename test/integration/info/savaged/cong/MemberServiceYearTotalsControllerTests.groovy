@@ -24,6 +24,8 @@ class MemberServiceYearTotalsControllerTests extends ControllerUnitTestCase {
 
     protected void setUp() {
         super.setUp()
+        mockLogging MemberServiceYearTotalsController, true
+        mockLogging TotalsService, true
     }
 
     protected void tearDown() {
@@ -46,5 +48,17 @@ class MemberServiceYearTotalsControllerTests extends ControllerUnitTestCase {
         assertNotNull renderArgs.model
         assertNotNull renderArgs.model.serviceYearTotals
         assertEquals 'Savage, Gaile', renderArgs.model.serviceYearTotals.publisher.toString()
+        assertNotNull renderArgs.model.serviceYearTotals.hours
+        assertEquals 686, renderArgs.model.serviceYearTotals.hours
+
+        controller.with {
+            params.serviceYear_year = '2009'
+            index()
+        }
+        assertNotNull renderArgs.model
+        assertNotNull renderArgs.model.serviceYearTotals
+        assertEquals 'Savage, Gaile', renderArgs.model.serviceYearTotals.publisher.toString()
+        assertNotNull renderArgs.model.serviceYearTotals.hours
+        assertEquals 100, renderArgs.model.serviceYearTotals.hours
     }
 }

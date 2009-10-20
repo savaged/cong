@@ -38,6 +38,12 @@ class DateUtilsTests extends GrailsUnitTestCase {
        assertEquals yyyymm, DateUtils.convert(y, m)
        assertEquals y, DateUtils.convert(yyyymm)['year']
        assertEquals m, DateUtils.convert(yyyymm)['month']
+
+        m = 9
+        yyyymm = 200909
+        assertEquals yyyymm, DateUtils.convert(y, m)
+        assertEquals y, DateUtils.convert(yyyymm)['year']
+        assertEquals m, DateUtils.convert(yyyymm)['month']
    }
    
    void testPreviousMonthsRange() {

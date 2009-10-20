@@ -7,19 +7,19 @@ class BootStrap {
 
     def init = { servletContext ->
         if (Environment.current != Environment.PRODUCTION &&
-	    Environment.current != Environment.CUSTOM) { 
+            Environment.current != Environment.CUSTOM) { 
             
-	    log.debug "bootstrapping a sample data-set for testing, for the [${Environment.current}] environment..."
+            log.debug "bootstrapping a sample data-set for testing, for the [${Environment.current}] environment..."
 
             def save = {
-		if (!it.validate()) {
-		    it.errors.allErrors.each {
-			log.debug it
-		    }
-		} else {
-                    it.save()
-		}
-	    }
+                if (!it.validate()) {
+                    it.errors.allErrors.each {
+                        log.debug it
+                    }
+                } else {
+                    it.save(flush:true)
+                }
+            }
 
             def df = new SimpleDateFormat('yyyy-MM-dd')
 
@@ -48,6 +48,8 @@ class BootStrap {
                 new ServiceReport(yyyymm:200905, hours:73, publisher:members[1]),
                 new ServiceReport(yyyymm:200906, hours:72, publisher:members[1]),
                 new ServiceReport(yyyymm:200907, hours:71, publisher:members[1]),
+                new ServiceReport(yyyymm:200908, hours:70, publisher:members[1]),
+                new ServiceReport(yyyymm:200909, hours:100, publisher:members[1]),
 
                 new ServiceReport(yyyymm:200901, hours:50, publisher:members[2], comments:'Aux pio'),
                 new ServiceReport(yyyymm:200902, hours:16, publisher:members[2]),
@@ -73,52 +75,57 @@ class BootStrap {
                 new ServiceReport(yyyymm:200906, hours:12, publisher:members[4]),
                 new ServiceReport(yyyymm:200907, hours:11, publisher:members[4]),
                 
-		new ServiceReport(yyyymm:200906, hours:1, publisher:members[5]),
+                new ServiceReport(yyyymm:200906, hours:1, publisher:members[5]),
 
-		new ServiceReport(yyyymm:200901, hours:1, publisher:members[7]),
-		new ServiceReport(yyyymm:200902, hours:1, publisher:members[7]),
-		new ServiceReport(yyyymm:200903, hours:1, publisher:members[7])
+                new ServiceReport(yyyymm:200901, hours:1, publisher:members[7]),
+                new ServiceReport(yyyymm:200902, hours:1, publisher:members[7]),
+                new ServiceReport(yyyymm:200903, hours:1, publisher:members[7])
             ]
             serviceReports.each save
 
-	    def activePublisherCounts = [
-	        new ActivePublisherCount(yyyymm:200901, publishers:6, baptizedPublishers:3),
-	        new ActivePublisherCount(yyyymm:200902, publishers:6, baptizedPublishers:3),
-	        new ActivePublisherCount(yyyymm:200903, publishers:6, baptizedPublishers:3),
-	        new ActivePublisherCount(yyyymm:200904, publishers:4, baptizedPublishers:1),
-	        new ActivePublisherCount(yyyymm:200905, publishers:4, baptizedPublishers:1),
-	        new ActivePublisherCount(yyyymm:200906, publishers:5, baptizedPublishers:2),
-	        new ActivePublisherCount(yyyymm:200907, publishers:4, baptizedPublishers:1)
-	    ]
-	    activePublisherCounts.each save
+            def activePublisherCounts = [
+                new ActivePublisherCount(yyyymm:200901, publishers:6, baptizedPublishers:3),
+                new ActivePublisherCount(yyyymm:200902, publishers:6, baptizedPublishers:3),
+                new ActivePublisherCount(yyyymm:200903, publishers:6, baptizedPublishers:3),
+                new ActivePublisherCount(yyyymm:200904, publishers:4, baptizedPublishers:1),
+                new ActivePublisherCount(yyyymm:200905, publishers:4, baptizedPublishers:1),
+                new ActivePublisherCount(yyyymm:200906, publishers:5, baptizedPublishers:2),
+                new ActivePublisherCount(yyyymm:200907, publishers:4, baptizedPublishers:1),
+                new ActivePublisherCount(yyyymm:200908, publishers:1, baptizedPublishers:1),
+                new ActivePublisherCount(yyyymm:200909, publishers:1, baptizedPublishers:1)
+            ]
+            activePublisherCounts.each save
 
-	    def serviceReportTotals = [
-	        new ServiceReportTotals(yyyymm:200901, publishers:4, hours:47, category:Categories.PUBLISHERS),
-	        new ServiceReportTotals(yyyymm:200901, publishers:1, hours:50, category:Categories.AUXILIARY_PIONEERS),
-	        new ServiceReportTotals(yyyymm:200901, publishers:1, hours:75, category:Categories.REGULAR_PIONEERS),
-		
-		new ServiceReportTotals(yyyymm:200902, publishers:5, hours:54, category:Categories.PUBLISHERS),
-	        new ServiceReportTotals(yyyymm:200902, publishers:1, hours:76, category:Categories.REGULAR_PIONEERS),
-		
+            def serviceReportTotals = [
+                new ServiceReportTotals(yyyymm:200901, publishers:4, hours:47, category:Categories.PUBLISHERS),
+                new ServiceReportTotals(yyyymm:200901, publishers:1, hours:50, category:Categories.AUXILIARY_PIONEERS),
+                new ServiceReportTotals(yyyymm:200901, publishers:1, hours:75, category:Categories.REGULAR_PIONEERS),
+                
+                new ServiceReportTotals(yyyymm:200902, publishers:5, hours:54, category:Categories.PUBLISHERS),
+                new ServiceReportTotals(yyyymm:200902, publishers:1, hours:76, category:Categories.REGULAR_PIONEERS),
+                
                 new ServiceReportTotals(yyyymm:200903, publishers:4, hours:36, category:Categories.PUBLISHERS),
-	        new ServiceReportTotals(yyyymm:200903, publishers:1, hours:50, category:Categories.AUXILIARY_PIONEERS),
-	        new ServiceReportTotals(yyyymm:200903, publishers:1, hours:75, category:Categories.REGULAR_PIONEERS),
-		
+                new ServiceReportTotals(yyyymm:200903, publishers:1, hours:50, category:Categories.AUXILIARY_PIONEERS),
+                new ServiceReportTotals(yyyymm:200903, publishers:1, hours:75, category:Categories.REGULAR_PIONEERS),
+                
                 new ServiceReportTotals(yyyymm:200904, publishers:3, hours:42, category:Categories.PUBLISHERS),
-	        new ServiceReportTotals(yyyymm:200904, publishers:1, hours:74, category:Categories.REGULAR_PIONEERS),
+                new ServiceReportTotals(yyyymm:200904, publishers:1, hours:74, category:Categories.REGULAR_PIONEERS),
 
                 new ServiceReportTotals(yyyymm:200905, publishers:3, hours:39, category:Categories.PUBLISHERS),
-	        new ServiceReportTotals(yyyymm:200905, publishers:1, hours:73, category:Categories.REGULAR_PIONEERS),
+                new ServiceReportTotals(yyyymm:200905, publishers:1, hours:73, category:Categories.REGULAR_PIONEERS),
 
                 new ServiceReportTotals(yyyymm:200906, publishers:4, hours:37, category:Categories.PUBLISHERS),
-	        new ServiceReportTotals(yyyymm:200906, publishers:1, hours:72, category:Categories.REGULAR_PIONEERS),
-	
+                new ServiceReportTotals(yyyymm:200906, publishers:1, hours:72, category:Categories.REGULAR_PIONEERS),
+        
                 new ServiceReportTotals(yyyymm:200907, publishers:3, hours:33, category:Categories.PUBLISHERS),
-	        new ServiceReportTotals(yyyymm:200907, publishers:1, hours:71, category:Categories.REGULAR_PIONEERS)
-	    ]
-	    serviceReportTotals.each save
+                new ServiceReportTotals(yyyymm:200907, publishers:1, hours:71, category:Categories.REGULAR_PIONEERS),
 
-	    log.debug 'bootstrapping test data complete'
+                new ServiceReportTotals(yyyymm:200908, publishers:1, hours:70, category:Categories.REGULAR_PIONEERS),
+                new ServiceReportTotals(yyyymm:200909, publishers:1, hours:100, category:Categories.REGULAR_PIONEERS)
+            ]
+            serviceReportTotals.each save
+
+            log.debug 'bootstrapping test data complete'
         }
     }
     
