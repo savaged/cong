@@ -24,15 +24,15 @@ class BootStrap {
             def df = new SimpleDateFormat('yyyy-MM-dd')
 
             def members = [
-                new Member(lastname:'Savage', firstname:'David', birth:df.parse('1959-12-02'), isElder:true, isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1986-07-12')),
-                new Member(lastname:'Savage', firstname:'Gaile', birth:df.parse('1963-01-09'), isRegularPioneer:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1990-09-23')),
-                new Member(lastname:'Savage', firstname:'Jude', birth:df.parse('1980-01-16'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1914-01-01')),
-                new Member(lastname:'Savage', firstname:'Saskia', birth:df.parse('1975-04-23'), isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1914-01-01')),
-                new Member(lastname:'Savage', firstname:'Kieran', birth:df.parse('1970-05-11'), isServant:true, isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1914-01-01')),
-                new Member(lastname:'Savage', firstname:'John', birth:df.parse('1968-05-23'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1979-12-30')),
-                new Member(lastname:'Savage', firstname:'Ethan', birth:df.parse('1960-09-01'), isMale:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1989-12-30'), inactiveStarting:df.parse('2007-04-01')),
-                new Member(lastname:'Savage', firstname:'Allison', birth:df.parse('1968-02-21'), isInactive:true, inactiveStarting:df.parse('2007-04-01'), isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1987-11-20')),
-                new Member(lastname:'Savage', firstname:'Dave', birth:df.parse('1969-09-30'), isMale:true, isPublisher:true, groupUnit:Groups.PENFIELDS_HOUSE, immersion:df.parse('1986-04-10'))
+                new Member(lastname:'Savage', firstname:'David', birth:df.parse('1959-12-02'), isElder:true, isMale:true, isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1986-07-12')),
+                new Member(lastname:'Savage', firstname:'Gaile', birth:df.parse('1963-01-09'), isRegularPioneer:true, isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1990-09-23')),
+                new Member(lastname:'Savage', firstname:'Jude', birth:df.parse('1980-01-16'), isMale:true, isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1914-01-01')),
+                new Member(lastname:'Savage', firstname:'Saskia', birth:df.parse('1975-04-23'), isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1914-01-01')),
+                new Member(lastname:'Savage', firstname:'Kieran', birth:df.parse('1970-05-11'), isServant:true, isMale:true, isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1914-01-01')),
+                new Member(lastname:'Savage', firstname:'John', birth:df.parse('1968-05-23'), isMale:true, isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1979-12-30')),
+                new Member(lastname:'Savage', firstname:'Ethan', birth:df.parse('1960-09-01'), isMale:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1989-12-30'), inactiveStarting:df.parse('2007-04-01')),
+                new Member(lastname:'Savage', firstname:'Allison', birth:df.parse('1968-02-21'), isInactive:true, inactiveStarting:df.parse('2007-04-01'), isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1987-11-20')),
+                new Member(lastname:'Savage', firstname:'Dave', birth:df.parse('1969-09-30'), isMale:true, isPublisher:true, groupUnit:'PENFIELDS_HOUSE', immersion:df.parse('1986-04-10'))
             ]
             members.each save
           

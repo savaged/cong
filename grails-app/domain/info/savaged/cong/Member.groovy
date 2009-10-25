@@ -18,23 +18,13 @@ along with cong.  If not, see <http://www.gnu.org/licenses/>.
 */
 package info.savaged.cong
 
-enum Groups {
-    AMBLER_ROAD,
-    COURT_GARDENS,
-    HERSLET_ROAD,
-    MOLTON_HOUSE,
-    NEW_WHARF_ROAD,
-    PENFIELDS_HOUSE,
-    VULCAN_WAY
-}
-
 class Member {
 
     String lastname
     String firstname
     Date birth
     Boolean isMale
-    Groups groupUnit
+    String groupUnit
     Date immersion
     Boolean isPublisher
     Boolean isElder
