@@ -38,14 +38,14 @@ environments {
 	prodcopy {
 		dataSource {
 			dbCreate = "update"
-			url = "jdbc:hsqldb:file:/Users/davidsavage/savaged.info/cong/reports/cong/testDb/congDb;shutdown=true"
+			url = "jdbc:hsqldb:file:/Users/savaged/savaged.info/cong/reports/cong/testDb/congDb;shutdown=true"
 		}
 	}
 	production {
 		dataSource {
 			dbCreate = "update"
                         //url = "jdbc:hsqldb:hsql://localhost/congdb"
-url = "jdbc:hsqldb:file:/Users/davidsavage/savaged.info/cong/reports/cong/db/congDb;shutdown=true"
+url = "jdbc:hsqldb:file:/Users/savaged/savaged.info/cong/reports/cong/db/congDb;shutdown=true"
 		}
 	}
 }
