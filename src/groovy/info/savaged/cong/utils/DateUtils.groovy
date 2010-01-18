@@ -42,14 +42,6 @@ class DateUtils {
        yyyymm
    }
 
-    static Boolean isCurrentServiceReportMonth(Integer yyyymm) {
-        def cal = convertToCalendar(yyyymm)
-        def monthRequested = cal.get(Calendar.MONTH)
-        cal = Calendar.instance
-        def currentMonth = cal.get(Calendar.MONTH)
-        currentMonth - monthRequested == 1
-    }
-
    private static Calendar convertToCalendar(Integer yyyymm) {
        def map = convert(yyyymm)
        def cal = Calendar.instance

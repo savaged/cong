@@ -59,11 +59,12 @@ class TotalsService {
 
         def yyyymm = DateUtils.convert(year, month)
 
-        if (DateUtils.isCurrentServiceReportMonth(yyyymm)) {
+        def totals = load(yyyymm)
+        if (totals.rows.size() == 0) {
             def serviceReportTotals = calc(yyyymm)
             persist(serviceReportTotals)
         }
-        load(yyyymm)
+        totals
     }
 
     private List calc(Integer yyyymm) {
